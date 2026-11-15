@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>3dm preview</title>
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<style>html,body{margin:0;height:100%;background:#e9e7e2;overflow:hidden}#c{width:100%;height:100%;display:block}
+#t{position:fixed;left:16px;top:12px;font:600 16px system-ui;color:#222}</style>
+</head><body><canvas id="c"></canvas><div id="t"></div>
+<script type="module">
+/* Internal tool: renders one .3dm (?f=m06) with neutral studio light so the
+   model can be identified. Not part of the site. */
+import * as THREE from 'three';
+import { Rhino3dmLoader } from 'three/addons/loaders/3DMLoader.js';
+const f = new URLSearchParams(location.search).get('f') || 'm01';
+document.getElementById('t').textContent = f;
+const r = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true });
+r.setPixelRatio(1); r.setSize(innerWidth, innerHeight);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#e9e7e2');
+scene.add(new THREE.HemisphereLight(0xffffff, 0x888888, 2.2));
+const d = new THREE.DirectionalLight(0xffffff, 2.4); d.position.set(3, 5, 4); scene.add(d);
+const cam = new THREE.PerspectiveCamera(30, innerWidth / innerHeight, .1, 1e6);
+const loader = new Rhino3dmLoader();
+loader.setLibraryPath('https://cdn.jsdelivr.net/npm/rhino3dm@8.4.0/');
+loader.load(`${f}.3dm`, obj => {
+  /* drop curves, lights and annotation; keep the surfaces */
+  const keep = [];
+  obj.traverse(o => { if (o.isMesh) keep.push(o); });
+  const g = new THREE.Group();
+  keep.forEach(m => { m.material = new THREE.MeshStandardMaterial({ color: 0xb9b4aa, roughness: .55, metalness: .1, side: THREE.DoubleSide }); g.add(m.clone()); });
+  g.rotation.x = -Math.PI / 2;                 /* Rhino is Z-up */
+  scene.add(g); g.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(g), s = box.getSize(new THREE.Vector3()), c = box.getCenter(new THREE.Vector3());
+  const R = s.length() / 2;
+  cam.position.copy(c).add(new THREE.Vector3(1, .75, 1.25).normalize().multiplyScalar(R / Math.sin(THREE.MathUtils.degToRad(15)) * 1.05));
+  cam.near = R / 100; cam.far = R * 100; cam.updateProjectionMatrix(); cam.lookAt(c);
+  r.render(scene, cam);
+  window.__done = { meshes: keep.length, size: s.toArray().map(v => +v.toFixed(1)) };
+}, undefined, e => { window.__done = { error: String(e) }; });
+</script></body></html>

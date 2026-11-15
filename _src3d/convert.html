@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>3dm to glb</title>
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script></head><body>
+<script type="module">
+/* Internal tool: converts one .3dm into a web-ready .glb.
+   Keeps surfaces, and with { curves: true } also curves (drawn details such
+   as the rings on a cooktop); never lights or notes. Turns Rhino's Z-up into
+   Y-up, centres the model on the floor, and keeps every part as its own
+   mesh so the site can pull them apart for an exploded view.
+   window.convert('m06') resolves to the GLB as base64. */
+import * as THREE from 'three';
+import { Rhino3dmLoader } from 'three/addons/loaders/3DMLoader.js';
+import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+
+const loader = new Rhino3dmLoader();
+loader.setLibraryPath('https://cdn.jsdelivr.net/npm/rhino3dm@8.4.0/');
+
+window.convert = (f, opt = {}) => new Promise((res, rej) => loader.load(`${f}.3dm`, obj => {
+  const root = new THREE.Group(); root.name = f;
+  const meshes = [];
+  obj.updateMatrixWorld(true);
+  obj.traverse(o => { if (o.isMesh) meshes.push(o); });
+  const zup = new THREE.Matrix4().makeRotationX(-Math.PI / 2);
+  meshes.forEach((m, i) => {
+    const g = m.geometry.clone();
+    g.applyMatrix4(m.matrixWorld); g.applyMatrix4(zup);
+    g.deleteAttribute('uv');
+    if (!g.attributes.normal) g.computeVertexNormals();
+    const src = Array.isArray(m.material) ? m.material[0] : m.material;
+    const mat = new THREE.MeshStandardMaterial({
+      color: src?.color ? src.color.clone() : new THREE.Color(0xb9b4aa),
+      roughness: .5, metalness: .1, side: THREE.DoubleSide });
+    const mesh = new THREE.Mesh(g, mat); mesh.name = `part-${String(i + 1).padStart(2, '0')}`;
+    root.add(mesh);
+  });
+  if (opt.curves) {
+    const lines = []; obj.traverse(o => { if (o.isLine) lines.push(o); });
+    lines.forEach((l, i) => {
+      const g = new THREE.BufferGeometry().setAttribute('position', l.geometry.attributes.position.clone());
+      g.applyMatrix4(l.matrixWorld); g.applyMatrix4(zup);
+      const c = l.material?.color ? l.material.color.clone() : new THREE.Color(0xff0000);
+      const line = new THREE.Line(g, new THREE.LineBasicMaterial({ color: c }));
+      line.name = `curve-${String(i + 1).padStart(2, '0')}`;
+      root.add(line);
+    });
+  }
+  /* centre on X/Z, stand on the floor */
+  const box = new THREE.Box3(); root.children.forEach(m => { if (m.isMesh) box.expandByObject(m); });
+  const c = box.getCenter(new THREE.Vector3());
+  root.children.forEach(m => m.geometry.translate(-c.x, -box.min.y, -c.z));
+  new GLTFExporter().parse(root, buf => {
+    let s = ''; const b = new Uint8Array(buf);
+    for (let i = 0; i < b.length; i += 0x8000) s += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000));
+    res(JSON.stringify({ parts: root.children.length, curves: root.children.filter(m => m.isLine).length, bytes: b.length, size: box.getSize(new THREE.Vector3()).toArray().map(v => +v.toFixed(1)), b64: btoa(s) }));
+  }, rej, { binary: true });
+}, undefined, rej));
+window.__ready = true;
+</script></body></html>

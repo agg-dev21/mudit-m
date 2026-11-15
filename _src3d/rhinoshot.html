@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>rhino viewport shots</title>
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script></head><body style="margin:0">
+<script type="module">
+/* Internal tool: a picture of one of Mudit's Rhino models the way Rhino's
+   Perspective viewport shows it — grey gradient, construction grid, shaded
+   in the object colours with dark edges, curves as lines. The geometry is
+   his own file (converted to GLB). window.shot(url, yaw, tilt) resolves to a
+   JPEG data URL. */
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+const W = 1600, H = 1000;
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(W, H);
+document.body.appendChild(renderer.domElement);
+
+/* Rhino's viewport background: a soft vertical grey gradient */
+const bg = (() => {
+  const c = document.createElement('canvas'); c.width = 4; c.height = 256;
+  const g = c.getContext('2d'), r = g.createLinearGradient(0, 0, 0, 256);
+  r.addColorStop(0, '#c9c9c9'); r.addColorStop(1, '#8f8f8f');
+  g.fillStyle = r; g.fillRect(0, 0, 4, 256);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+})();
+
+window.shot = (url, yaw = -.7, tilt = .5, back = 1) => new Promise((res, rej) => new GLTFLoader().load(url, g => {
+  const scene = new THREE.Scene(); scene.background = bg;
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x777777, 1.6));
+  const d = new THREE.DirectionalLight(0xffffff, 1.4); scene.add(d);
+  const model = g.scene;
+  const lines = [];
+  model.traverse(o => {
+    if (o.isMesh) {
+      const c = o.material?.color ? o.material.color.clone() : new THREE.Color(0xbbbbbb);
+      if (c.r + c.g + c.b < .3) c.setRGB(.18, .18, .19);
+      o.material = new THREE.MeshLambertMaterial({ color: c, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+      lines.push(o);
+    } else if (o.isLine) {
+      o.material = new THREE.LineBasicMaterial({ color: o.material?.color || 0xff0000 });
+    }
+  });
+  /* the dark outline Rhino draws on every edge */
+  lines.forEach(o => o.add(new THREE.LineSegments(new THREE.EdgesGeometry(o.geometry, 35), new THREE.LineBasicMaterial({ color: 0x1a1a1a }))));
+  model.rotation.y = yaw;
+  scene.add(model);
+  model.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(model), size = box.getSize(new THREE.Vector3()), c = box.getCenter(new THREE.Vector3());
+  const R = size.length() / 2;
+  /* construction grid on the floor, minor and major lines, red and green axes */
+  const step = Math.pow(10, Math.floor(Math.log10(R / 3)));
+  const n = Math.ceil(R * 3 / step) * 2;
+  const grid = new THREE.GridHelper(n * step, n, 0x777777, 0xa3a3a3); grid.position.set(c.x, box.min.y, c.z); scene.add(grid);
+  const axis = (a, b, col) => { const g2 = new THREE.BufferGeometry().setFromPoints([a, b]); scene.add(new THREE.Line(g2, new THREE.LineBasicMaterial({ color: col }))); };
+  const y0 = box.min.y + R * .001;
+  axis(new THREE.Vector3(c.x, y0, c.z), new THREE.Vector3(c.x + R * 3, y0, c.z), 0xb04040);
+  axis(new THREE.Vector3(c.x, y0, c.z), new THREE.Vector3(c.x, y0, c.z - R * 3), 0x40a040);
+  const cam = new THREE.PerspectiveCamera(30, W / H, R / 100, R * 50);
+  const dist = R / Math.sin(THREE.MathUtils.degToRad(15)) * .95 * back;
+  cam.position.set(c.x + dist * Math.cos(tilt) * .55, c.y + dist * Math.sin(tilt), c.z + dist * Math.cos(tilt) * .85);
+  cam.lookAt(c);
+  d.position.copy(cam.position).add(new THREE.Vector3(R, R * 2, 0));
+  renderer.render(scene, cam);
+  res(renderer.domElement.toDataURL('image/jpeg', .9));
+}, undefined, rej));
+/* Rhino's four viewports as he works in them: Wireframe mode in all four,
+   the blue-grey background, red and green axes, a little axis marker, and
+   the name tabs (the active one, Front, in blue). Earlier notes: in Shaded mode,
+   each with its own construction grid and a name tab, split by dark lines.
+   window.four(url, yaw, tilt) resolves to a JPEG data URL. */
+window.four = (url, yaw = -.6, tilt = .5, back = 1, crease = 9) => new Promise((res, rej) => new GLTFLoader().load(url, g => {
+  const scene = new THREE.Scene();
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x777777, 1.6));
+  const d = new THREE.DirectionalLight(0xffffff, 1.4); scene.add(d);
+  const model = g.scene, fills = [], wires = [];
+  model.traverse(o => {
+    if (o.isMesh) {
+      const c = o.material?.color ? o.material.color.clone() : new THREE.Color(0xbbbbbb);
+      if (c.r + c.g + c.b < .3) c.setRGB(.18, .18, .19);
+      o.material = new THREE.MeshLambertMaterial({ color: c, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+      fills.push(o);
+    } else if (o.isLine) o.material = new THREE.LineBasicMaterial({ color: o.material?.color || 0xff0000 });
+  });
+  /* a low crease angle draws the bands across curved surfaces, like Rhino's isocurves */
+  fills.forEach(o => { const e = new THREE.LineSegments(new THREE.EdgesGeometry(o.geometry, crease), new THREE.LineBasicMaterial({ color: 0x0d0d0d })); o.add(e); wires.push(e); });
+  scene.add(model); model.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(model), size = box.getSize(new THREE.Vector3()), c = box.getCenter(new THREE.Vector3());
+  const R = size.length() / 2, step = Math.pow(10, Math.floor(Math.log10(R / 3))), n = Math.ceil(R * 3 / step) * 2;
+  const grid = (rot, pos) => { const gh = new THREE.GridHelper(n * step * 2, n * 2, 0xc3c9cf, 0xbcc3ca); gh.rotation.copy(rot); gh.position.copy(pos); scene.add(gh); return gh; };
+  /* the world axes: x red, y green (Rhino's y is our -z), z green as Rhino shows it */
+  const o0 = new THREE.Vector3(c.x, box.min.y, c.z), L = R * 6;
+  const axisLine = (dir, col) => { const ge = new THREE.BufferGeometry().setFromPoints([o0.clone().addScaledVector(dir, -L), o0.clone().addScaledVector(dir, L)]); const ln = new THREE.Line(ge, new THREE.LineBasicMaterial({ color: col })); scene.add(ln); return ln; };
+  axisLine(new THREE.Vector3(1, 0, 0), 0xc23a3a); axisLine(new THREE.Vector3(0, 0, 1), 0x3a9a3a); axisLine(new THREE.Vector3(0, 1, 0), 0x3a9a3a);
+  const gTop = grid(new THREE.Euler(0, 0, 0), new THREE.Vector3(c.x, box.min.y, c.z));
+  const gFront = grid(new THREE.Euler(Math.PI / 2, 0, 0), new THREE.Vector3(c.x, c.y, box.min.z - R * .01));
+  const gRight = grid(new THREE.Euler(0, 0, Math.PI / 2), new THREE.Vector3(box.min.x - R * .01, c.y, c.z));
+  const hw = W / 2, hh = H / 2, asp = hw / hh, m = 1.25;
+  const ortho = (dir, up) => {
+    const half = Math.max(size.x, size.y, size.z) * .5 * m;
+    const cam = new THREE.OrthographicCamera(-half * asp, half * asp, half, -half, -R * 20, R * 20);
+    cam.position.copy(c).addScaledVector(dir, R * 4); cam.up.copy(up); cam.lookAt(c); return cam;
+  };
+  const views = [
+    { name: 'Top',         cam: ortho(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, -1)), grid: gTop,   shade: false, x: 0,  y: hh },
+    { name: 'Perspective', cam: null,                                                        grid: gTop,   shade: false, x: hw, y: hh },
+    { name: 'Front',       cam: ortho(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0)), grid: gFront, shade: false, x: 0,  y: 0 },
+    { name: 'Right',       cam: ortho(new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 1, 0)), grid: gRight, shade: false, x: hw, y: 0 }
+  ];
+  model.rotation.y = 0; model.updateMatrixWorld(true);
+  const pc = new THREE.PerspectiveCamera(30, asp, R / 100, R * 50);
+  const dist = R / Math.sin(THREE.MathUtils.degToRad(15)) * .8 * back;
+  pc.position.set(c.x + dist * Math.cos(tilt) * Math.sin(-yaw), c.y + dist * Math.sin(tilt), c.z + dist * Math.cos(tilt) * Math.cos(yaw)); pc.lookAt(c);
+  views[1].cam = pc;
+  d.position.copy(pc.position).add(new THREE.Vector3(R, R * 2, 0));
+  renderer.setScissorTest(true); renderer.autoClear = false;
+  renderer.setClearColor(0x000000); renderer.clear();
+  views.forEach(v => {
+    [gTop, gFront, gRight].forEach(gg => gg.visible = gg === v.grid);
+    fills.forEach(o => { o.material.visible = v.shade; });
+    scene.background = new THREE.Color(0xa9b1b9);
+    renderer.setViewport(v.x, v.y, hw, hh); renderer.setScissor(v.x, v.y, hw, hh);
+    renderer.clear(); renderer.render(scene, v.cam);
+  });
+  renderer.setScissorTest(false); renderer.autoClear = true;
+  fills.forEach(o => { o.material.visible = true; });
+  /* the frame: dark splits and the viewport name tabs */
+  const out = document.createElement('canvas'); out.width = W; out.height = H;
+  const x = out.getContext('2d'); x.drawImage(renderer.domElement, 0, 0);
+  x.fillStyle = '#6d747b'; x.fillRect(hw - 2, 0, 4, H); x.fillRect(0, hh - 2, W, 4);
+  x.font = '600 18px Segoe UI, Arial, sans-serif'; x.textBaseline = 'middle';
+  const gizmo = { Top: ['x', 'y'], Perspective: ['x', 'y', 'z'], Front: ['x', 'z'], Right: ['y', 'z'] };
+  [['Top', 0, 0], ['Perspective', hw, 0], ['Front', 0, hh], ['Right', hw, hh]].forEach(([t, ox, oy]) => {
+    /* the name tab, with its little menu arrow */
+    const w = x.measureText(t).width + 16, on = t === 'Front';
+    x.fillStyle = on ? '#1f6cc4' : '#f1f3f5'; x.fillRect(ox + 8, oy + 8, w, 26);
+    x.fillStyle = on ? '#ffffff' : '#222'; x.fillText(t, ox + 16, oy + 22);
+    x.fillStyle = on ? '#1f6cc4' : '#f1f3f5'; x.fillRect(ox + 10 + w, oy + 8, 22, 26);
+    x.fillStyle = on ? '#ffffff' : '#555';
+    x.beginPath(); x.moveTo(ox + 15 + w, oy + 18); x.lineTo(ox + 27 + w, oy + 18); x.lineTo(ox + 21 + w, oy + 25); x.fill();
+    /* the axis marker in the corner */
+    const gx = ox + 46, gy = oy + hh - 46, a = gizmo[t];
+    x.strokeStyle = '#4a5157'; x.lineWidth = 1.5; x.font = '15px Segoe UI, Arial, sans-serif'; x.fillStyle = '#3a4045';
+    x.beginPath(); x.moveTo(gx, gy - 34); x.lineTo(gx, gy); x.lineTo(gx + 34, gy);
+    if (a.length === 3) { x.moveTo(gx, gy); x.lineTo(gx + 20, gy - 14); }
+    x.stroke();
+    x.fillText(a[0], gx + 38, gy + 2); x.fillText(a[a.length - 1], gx - 4, gy - 44);
+    if (a.length === 3) x.fillText(a[1], gx + 22, gy - 22);
+    x.font = '600 18px Segoe UI, Arial, sans-serif';
+  });
+  res(out.toDataURL('image/jpeg', .9));
+}, undefined, rej));
+window.__ready = true;
+</script></body></html>

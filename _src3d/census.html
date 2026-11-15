@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>3dm census</title></head><body>
+<script src="https://cdn.jsdelivr.net/npm/rhino3dm@8.4.0/rhino3dm.min.js"></script>
+<script>
+/* Internal tool: what is inside a .3dm, and what of it can be shown on the
+   web. window.census('m04') resolves to a summary. */
+const TYPES = {};
+window.census = f => rhino3dm().then(async rh => {
+  for (const k in rh.ObjectType) TYPES[rh.ObjectType[k].value] = k;
+  const buf = new Uint8Array(await (await fetch(`${f}.3dm`)).arrayBuffer());
+  const doc = rh.File3dm.fromByteArray(buf);
+  const objs = doc.objects(), layers = doc.layers();
+  const out = { types: {}, hidden: 0, hiddenLayer: 0, brepNoMesh: 0, brepFaces: 0, extrNoMesh: 0, subd: 0, instances: 0, layers: [] };
+  for (let i = 0; i < layers.count; i++) { const L = layers.get(i); out.layers.push(`${L.name}${L.visible ? '' : ' (off)'}`); }
+  for (let i = 0; i < objs.count; i++) {
+    const o = objs.get(i), g = o.geometry(), a = o.attributes();
+    const ot = g.objectType, t = TYPES[ot && ot.value !== undefined ? ot.value : ot] || String(ot && ot.constructor && ot.constructor.name);
+    out.types[t] = (out.types[t] || 0) + 1;
+    if (!a.visible) out.hidden++;
+    const L = layers.findIndex ? layers.findIndex(a.layerIndex) : layers.get(a.layerIndex);
+    if (L && !L.visible) out.hiddenLayer++;
+    if (t === 'Brep') {
+      const faces = g.faces(); out.brepFaces += faces.count;
+      let has = 0; for (let k = 0; k < faces.count; k++) { const m = faces.get(k).getMesh(rh.MeshType.Any); if (m) has++; }
+      if (has < faces.count) out.brepNoMesh++;
+    }
+    if (t === 'Extrusion') { const m = g.getMesh(rh.MeshType.Any); if (!m) out.extrNoMesh++; }
+    if (t === 'SubD') out.subd++;
+    if (t === 'InstanceReference') out.instances++;
+  }
+  return JSON.stringify(out);
+});
+window.__ready = true;
+</script></body></html>

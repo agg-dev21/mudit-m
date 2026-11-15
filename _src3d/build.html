@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>study models</title>
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script></head><body>
+<script type="module">
+/* Internal tool: STUDY MODELS, built by hand from the project photos and CAD
+   sheets — not Mudit's own CAD. Proportions are read off the images, so they
+   are approximate. window.build('headrest' | 'plate' | 'lamp') resolves to
+   { parts, b64 } with the GLB as base64. Every part is its own mesh, so the
+   site can take it apart. Y is up; units are arbitrary (the viewer fits). */
+import * as THREE from 'three';
+import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+import { mergeGeometries as mergeRaw } from 'three/addons/utils/BufferGeometryUtils.js';
+/* shapes made different ways only merge once they are all un-indexed */
+const mergeGeometries = gs => mergeRaw(gs.map(g => g.index ? g.toNonIndexed() : g));
+
+const mat = (hex, rough = .5, metal = 0) => new THREE.MeshStandardMaterial({ color: hex, roughness: rough, metalness: metal });
+const part = (root, name, geo, m) => { const o = new THREE.Mesh(geo, m); o.name = name; root.add(o); return o; };
+/* a 2D outline (x, y) pushed along z */
+const prism = (pts, depth, holes = []) => {
+  const s = new THREE.Shape(pts.map(([x, y]) => new THREE.Vector2(x, y)));
+  holes.forEach(h => s.holes.push(new THREE.Path(h.map(([x, y]) => new THREE.Vector2(x, y)))));
+  const g = new THREE.ExtrudeGeometry(s, { depth, bevelEnabled: false });
+  g.translate(0, 0, -depth / 2);
+  return g;
+};
+const rrect = (w, h, r, n = 6) => {           /* rounded rectangle outline */
+  const pts = [], cs = [[w / 2 - r, h / 2 - r, 0], [-w / 2 + r, h / 2 - r, 1], [-w / 2 + r, -h / 2 + r, 2], [w / 2 - r, -h / 2 + r, 3]];
+  cs.forEach(([cx, cy, q]) => { for (let i = 0; i <= n; i++) { const a = (q + i / n) * Math.PI / 2; pts.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); } });
+  return pts;
+};
+
+/* ------------------------------------------------- headrest release & lock */
+/* From the CAD sheet: a tan module with a groove down each side, a raised
+   tab on top and a chevron latch at its nose, lined up in front of a grey
+   housing whose channel (with rails that ride in the grooves) it slides
+   into. Edges are softened a touch, as a printed part would be. */
+const soft = (pts, depth, holes = [], b = .01) => {
+  const s = new THREE.Shape(pts.map(([x, y]) => new THREE.Vector2(x, y)));
+  holes.forEach(h => s.holes.push(new THREE.Path(h.map(([x, y]) => new THREE.Vector2(x, y)))));
+  const g = new THREE.ExtrudeGeometry(s, { depth: depth - 2 * b, bevelEnabled: true, bevelThickness: b, bevelSize: b * .8, bevelSegments: 3, curveSegments: 8 });
+  g.translate(0, 0, -(depth - 2 * b) / 2);
+  return g;
+};
+function headrest() {
+  const root = new THREE.Group();
+  const tan = mat(0xb8964a, .55), grey = mat(0x86868a, .5);
+  /* module: 0.60 wide, 0.36 high, 1.0 long, along z */
+  const W = .6, H = .36, L = 1.0, gy = .05, gd = .055;               /* groove half-height, depth */
+  const prof = [[-W/2,0],[W/2,0],[W/2,H/2-gy],[W/2-gd,H/2-gy],[W/2-gd,H/2+gy],[W/2,H/2+gy],[W/2,H],
+                [-W/2,H],[-W/2,H/2+gy],[-W/2+gd,H/2+gy],[-W/2+gd,H/2-gy],[-W/2,H/2-gy]];
+  const zM = .62;                                                     /* module centre, in front of the housing */
+  part(root, 'module', soft(prof, L), tan).position.set(0, 0, zM);
+  /* the raised tab the thumb finds */
+  part(root, 'tab', soft(rrect(.24, .12, .02), .03, [], .006), tan).rotation.x = -Math.PI / 2;
+  root.getObjectByName('tab').position.set(0, H + .012, zM + .3);
+  /* chevron latch at the nose: leans forward and up, springs down when pushed */
+  const latch = part(root, 'latch', soft([[0,0],[.15,0],[.26,.13],[.1,.13]], .34, [], .008), tan);
+  latch.rotation.y = -Math.PI / 2; latch.position.set(0, H - .02, zM + L / 2 - .1);
+  /* housing: 0.84 wide, 0.56 high, 0.9 long, open channel along z */
+  const HW = .84, HH = .56, HL = .9, c = .018, base = .07;            /* clearance, floor thickness */
+  const cw = W + 2 * c, chH = H + 2 * c, ry = base + chH / 2;
+  const outer = [[-HW/2,0],[HW/2,0],[HW/2,HH],[-HW/2,HH]];
+  const chan = [[-cw/2,base],[cw/2,base],[cw/2,ry-gy+c],[cw/2-gd+c,ry-gy+c],[cw/2-gd+c,ry+gy-c],[cw/2,ry+gy-c],
+                [cw/2,base+chH],[-cw/2,base+chH],[-cw/2,ry+gy-c],[-cw/2+gd-c,ry+gy-c],[-cw/2+gd-c,ry-gy+c],[-cw/2,ry-gy+c]];
+  const housing = part(root, 'housing', soft(outer, HL, [chan.slice().reverse()]), grey);
+  housing.position.set(0, -base + .002, -.5);
+  /* turned the way the CAD sheet shows it: nose toward you, housing behind */
+  root.rotation.y = .9 + Math.PI;
+  return root;
+}
+
+/* ----------------------------------------------- kid's dining plate (spinner) */
+function plate() {
+  const root = new THREE.Group();
+  const red = mat(0xd31f26, .35), alu = mat(0xc9cdd2, .28, .85), yellow = mat(0xf2c21b, .45), steel = mat(0xb8bcc2, .3, .9);
+  const W = 1.2, D = .9, T = .045, R = .07;
+  /* top frame: three openings — one long at the back, two in front */
+  const o1 = rrect(1.0, .32, .02).map(([x, y]) => [x, y + .2]);
+  const o2 = rrect(.47, .3, .02).map(([x, y]) => [x - .265, y - .2]);
+  const o3 = rrect(.47, .3, .02).map(([x, y]) => [x + .265, y - .2]);
+  const top = new THREE.Shape(rrect(W, D, R).map(([x, y]) => new THREE.Vector2(x, y)));
+  [o1, o2, o3].forEach(h => top.holes.push(new THREE.Path(h.reverse().map(([x, y]) => new THREE.Vector2(x, y)))));
+  const topG = new THREE.ExtrudeGeometry(top, { depth: T, bevelEnabled: true, bevelThickness: .008, bevelSize: .008, bevelSegments: 2 });
+  topG.rotateX(-Math.PI / 2);
+  part(root, 'top-frame', topG, red).position.y = .24;
+  /* aluminium trays hung in the openings */
+  const tray = (w, d, x, z, name) => {
+    const h = .1, t = .006;
+    const pieces = [new THREE.BoxGeometry(w, t, d).translate(0, -h, 0),
+      new THREE.BoxGeometry(w, h, t).translate(0, -h / 2, d / 2), new THREE.BoxGeometry(w, h, t).translate(0, -h / 2, -d / 2),
+      new THREE.BoxGeometry(t, h, d).translate(w / 2, -h / 2, 0), new THREE.BoxGeometry(t, h, d).translate(-w / 2, -h / 2, 0)];
+    const o = part(root, name, mergeGeometries(pieces), alu); o.position.set(x, .24 + T * .5, z);
+  };
+  tray(.98, .3, 0, -.2, 'tray-long'); tray(.45, .28, -.265, .2, 'tray-left'); tray(.45, .28, .265, .2, 'tray-right');
+  /* base plate */
+  const baseG = new THREE.ExtrudeGeometry(new THREE.Shape(rrect(W, D, R).map(([x, y]) => new THREE.Vector2(x, y))), { depth: T, bevelEnabled: true, bevelThickness: .008, bevelSize: .008, bevelSegments: 2 });
+  baseG.rotateX(-Math.PI / 2);
+  part(root, 'base', baseG, red).position.y = 0;
+  /* four corner posts with the yellow rollers on them */
+  [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz], i) => {
+    const x = sx * (W / 2 - .09), z = sz * (D / 2 - .09);
+    const post = part(root, `post-${i + 1}`, new THREE.CylinderGeometry(.014, .014, .2, 16), steel); post.position.set(x, .14, z);
+    const rings = mergeGeometries([0, 1, 2].map(k => new THREE.TorusGeometry(.03, .016, 10, 24).rotateX(Math.PI / 2).translate(0, .075 + k * .03, 0)));
+    part(root, `roller-${i + 1}`, rings, yellow).position.set(x, 0, z);
+  });
+  return root;
+}
+
+/* --------------------------------------------------------- washer lamp */
+function lamp() {
+  const root = new THREE.Group();
+  const washer = mat(0xc7c9cc, .32, .9), band = mat(0x5a4636, .55, .4), glow = new THREE.MeshStandardMaterial({ color: 0xfff1d0, emissive: 0xffd08a, emissiveIntensity: 1.4, roughness: .3 });
+  const chainM = mat(0x8a7a6a, .5, .7), cord = mat(0xe8e8e8, .6);
+  const one = (r, t = .012) => {                       /* a flat washer */
+    const s = new THREE.Shape(); s.absarc(0, 0, r, 0, Math.PI * 2);
+    const h = new THREE.Path(); h.absarc(0, 0, r * .48, 0, Math.PI * 2, true); s.holes.push(h);
+    const g = new THREE.ExtrudeGeometry(s, { depth: t, bevelEnabled: false, curveSegments: 14 }); g.translate(0, 0, -t / 2); return g;
+  };
+  /* the shade: a tapered cone of washers, row by row, its top cut at a slant */
+  const rows = 9, H = 1.05, rTop = .34, rBot = .62, w = .062, geos = [];
+  const tilt = .22;                                     /* the slanted top */
+  for (let i = 0; i < rows; i++) {
+    const v = i / (rows - 1), y = H * (1 - v), r = rTop + (rBot - rTop) * v;
+    const n = Math.round(2 * Math.PI * r / (w * 1.9));
+    for (let k = 0; k < n; k++) {
+      const a = (k + (i % 2) * .5) / n * Math.PI * 2;
+      const yy = y + (i < 2 ? Math.cos(a) * tilt * (1 - v * 4) : 0);
+      if (i === 0 && Math.cos(a) < -.3) continue;       /* the low side of the slant */
+      const g = one(w);
+      const m = new THREE.Matrix4().makeRotationY(-a + Math.PI / 2);
+      const lean = Math.atan2(rBot - rTop, H);
+      m.multiply(new THREE.Matrix4().makeRotationX(-lean));
+      m.setPosition(Math.cos(a) * r, yy, Math.sin(a) * r);
+      geos.push(g.applyMatrix4(m));
+    }
+  }
+  part(root, 'shade', mergeGeometries(geos), washer);
+  /* the rims and the spiral band that wraps the shade */
+  const ring = (r, y, tube) => new THREE.TorusGeometry(r, tube, 8, 64).rotateX(Math.PI / 2).translate(0, y, 0);
+  part(root, 'bottom-rim', ring(rBot + .02, -.04, .022), band);
+  const topRim = part(root, 'top-rim', ring(rTop + .02, H + .02, .018), band); topRim.rotation.z = .2;
+  const sp = [];
+  for (let i = 0; i <= 80; i++) { const t = i / 80, a = t * Math.PI * 2.2, y = H * .95 - t * H * .85, r = rTop + (rBot - rTop) * (1 - y / H) + .03; sp.push(new THREE.Vector3(Math.cos(a) * r, y, Math.sin(a) * r)); }
+  part(root, 'spiral-band', new THREE.TubeGeometry(new THREE.CatmullRomCurve3(sp), 160, .02, 6), band);
+  /* bulb, holder and cord */
+  part(root, 'bulb', new THREE.SphereGeometry(.13, 24, 16).translate(0, .58, 0), glow);
+  part(root, 'holder', new THREE.CylinderGeometry(.05, .06, .16, 18).translate(0, .78, 0), cord);
+  part(root, 'cord', new THREE.CylinderGeometry(.012, .012, .7, 8).translate(0, 1.2, 0), cord);
+  /* the chain it hangs from */
+  const links = [];
+  for (let i = 0; i < 7; i++) links.push(new THREE.TorusGeometry(.04, .009, 6, 16).scale(1, 1.6, 1).rotateY(i % 2 ? Math.PI / 2 : 0).translate(.09, 1.12 + i * .1, 0));
+  part(root, 'chain', mergeGeometries(links), chainM);
+  /* three strands of washers hanging from the rim */
+  [[0, .42], [2.1, .55], [4.2, .48]].forEach(([a, len], i) => {
+    const x = Math.cos(a) * (rBot - .02), z = Math.sin(a) * (rBot - .02), g = [];
+    for (let k = 0; k < 3; k++) g.push(new THREE.TorusGeometry(.03, .007, 6, 16).translate(x, -.12 - k * .07, z));
+    g.push(new THREE.CylinderGeometry(.004, .004, len, 6).translate(x, -.04 - len / 2, z));
+    g.push(one(.11, .01).rotateY(a).translate(x, -.08 - len, z));
+    part(root, `strand-${i + 1}`, mergeGeometries(g), washer);
+  });
+  return root;
+}
+
+const BUILD = { headrest, plate, lamp };
+window.build = name => new Promise((res, rej) => {
+  const root = BUILD[name]();
+  root.updateMatrixWorld(true);
+  /* stand it on the floor, centred */
+  const box = new THREE.Box3().setFromObject(root), c = box.getCenter(new THREE.Vector3());
+  root.children.forEach(m => m.position.sub(new THREE.Vector3(c.x, box.min.y, c.z)));
+  new GLTFExporter().parse(root, buf => {
+    let s = ''; const b = new Uint8Array(buf);
+    for (let i = 0; i < b.length; i += 0x8000) s += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000));
+    res(JSON.stringify({ parts: root.children.length, bytes: b.length, b64: btoa(s) }));
+  }, rej, { binary: true });
+});
+window.__ready = true;
+</script></body></html>

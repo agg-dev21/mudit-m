@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mudit Manocha — Industrial Designer</title>
+<meta name="description" content="Industrial design portfolio of Mudit Manocha — product, assistive and furniture design. SCAD, Savannah.">
+<meta name="theme-color" content="#0e0e0f">
+<link rel="icon" href="assets/logo-a3dca4ae30.jpg">
+
+<meta property="og:title" content="Mudit Manocha — Industrial Designer">
+<meta property="og:description" content="Designing with curiosity.">
+<meta property="og:image" content="assets/electric-stove-body-handle-s-01-402197befe.jpg">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<link rel="stylesheet" href="assets/site.css?v=1793801100">
+<!-- the opening flash plays once per visit; skipped for a deep link or reduced motion -->
+<script>try{if(sessionStorage.getItem('intro')||location.hash.indexOf('#/')===0||matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('no-intro')}catch(e){}</script>
+</head>
+<body>
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro-half intro-top"></div>
+  <div class="intro-half intro-bot"></div>
+  <div class="intro-mark">
+    <p class="intro-name"><span>Mudit</span> <span>Manocha</span></p>
+    <p class="intro-line"><i></i><b class="intro-count">00</b></p>
+  </div>
+</div>
+
+<nav class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="nav-name" href="#top">Mudit Manocha</a>
+    <div class="nav-links">
+      <a href="#work" data-magnet>Work</a>
+      <a href="#about" data-magnet>About</a>
+      <a href="#contact" data-magnet>Contact</a>
+    </div>
+    <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="menu">Menu</button>
+  </div>
+</nav>
+
+<header class="hero" id="top" data-cursor="drag">
+  <div class="ring" id="ring"></div>
+  <div class="hero-shade" aria-hidden="true"></div>
+  <div class="hero-center" id="hero-center">
+    <h1 class="hero-name" data-cursor="face">Mudit Manocha</h1>
+    <p class="hero-tag" id="hero-tag"></p>
+  </div>
+  <!-- phone: a swipeable reel of the work in place of the ring -->
+  <div class="reel-wrap">
+    <div class="reel" id="reel"></div>
+    <div class="wrap reel-meta"><span class="label" id="reel-n"></span><span id="reel-t"></span></div>
+  </div>
+  <div class="wrap hero-foot">
+    <span class="status"><i></i><span id="status"></span></span>
+    <span class="label hide-s" id="hero-kicker"></span>
+    <a class="label" href="#work">Scroll ↓</a>
+  </div>
+</header>
+
+<main>
+  <section class="work" id="work">
+    <div class="wrap work-head">
+      <p class="label">Selected work</p>
+      <span class="label" id="work-count"></span>
+    </div>
+    <div class="stack" id="stack"></div>
+  </section>
+
+  <section class="model" id="modelling">
+    <div class="wrap">
+      <div class="model-head">
+        <p class="label">Modelling &amp; visualisation</p>
+        <span class="label" id="model-count"></span>
+      </div>
+      <div class="model-grid">
+        <ol class="model-list" id="model-list"></ol>
+        <figure class="model-view">
+          <div class="model-frames" id="model-frames"></div>
+          <figcaption id="model-cap"></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <div class="wrap">
+      <div class="about-head">
+        <p class="label">About</p>
+        <p class="label" id="about-where"></p>
+      </div>
+      <h2 class="about-say" id="about-say"></h2>
+      <ol class="steps rv" id="steps" aria-label="How the work gets made"></ol>
+      <div class="about-foot">
+        <div class="tl">
+          <p class="label">So far</p>
+          <ol class="tl-list" id="tl"></ol>
+        </div>
+        <table class="tblock" id="tblock" aria-label="At a glance"></table>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="wrap contact-in">
+      <div class="contact-text">
+        <h2 class="cta rv" id="cta"></h2>
+        <button class="mail" id="mail" data-cursor="copy"></button>
+        <div class="links" id="links"></div>
+      </div>
+      <figure class="me" id="me">
+        <span class="me-disc" id="me-disc"></span>
+        <img class="me-img" id="me-img" alt="Mudit Manocha">
+      </figure>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in label">
+    <span id="foot-l"></span>
+    <span id="foot-r"></span>
+  </div>
+</footer>
+
+
+<!-- phone menu -->
+<div class="menu" id="menu" aria-hidden="true">
+  <div class="wrap menu-in">
+    <nav class="menu-links" id="menu-links"></nav>
+    <div class="menu-foot" id="menu-foot"></div>
+  </div>
+</div>
+
+<!-- cursor -->
+<div class="cur" id="cur" aria-hidden="true">
+  <div class="cur-dot"></div>
+  <div class="cur-pill"><span id="cur-label"></span></div>
+  <div class="cur-media"><img id="cur-img" alt=""></div>
+</div>
+
+<article class="cs" id="cs" aria-live="polite" data-lenis-prevent></article>
+<div class="x3d" id="x3d" aria-hidden="true" data-lenis-prevent></div>
+
+<div class="lb" id="lb" role="dialog" aria-label="Image viewer" data-cursor="close"><img id="lb-img" alt=""></div>
+
+<script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script defer src="assets/data.js?v=1793801100"></script>
+<script defer src="assets/site.js?v=1793801100"></script>
+</body>
+</html>
