@@ -111,9 +111,6 @@ const SITE = {
         { img: ASSETS + 'cochlear-implant-fit-enhance-03-41b24c8106.jpg', cap: 'Cochlear Implant Fit Enhancer — CAD model' },
         { img: ASSETS + 'electric-stove-body-handle-s-01-8c9577cd6f.jpg', cap: 'Electric Stove — in context' }
       ] },
-    { tool: 'SketchUp',    role: 'Quick 3D massing',
-      note: 'Fast blocking-out of form, scale and layout before committing to detailed surfaces.',
-      img: null, cap: 'SketchUp work to come' },            // no SketchUp work to show yet
     { tool: 'Grasshopper', role: 'Parametric design', slug: 'grasshopper',
       page: { intro: 'Rule-based form in Grasshopper — a definition of points, curves and patterns where changing one input reshapes the whole object.',
               vase: { note: 'Rebuilt live in the browser from his definition: the same four lofted circles, attractor spiral, radius and S-curve falloff. Tile count, tile size, falloff strength and how far the tiles turn and lift are matched by eye to his render.' } },   // coursework filled in below
