@@ -942,7 +942,7 @@ function renderTool(t) {
 }
 
 /* the live Grasshopper vase: three.js loads only when the page opens */
-const VASE_JS = './vase.js?v=4';
+const VASE_JS = './vase.js?v=5';
 let vaseLive = null, vaseReq = 0;
 function dropVase() { vaseReq++; vaseLive?.dispose(); vaseLive = null; }
 function mountVaseInto(el) {

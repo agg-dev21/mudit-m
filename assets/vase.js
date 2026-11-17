@@ -94,7 +94,8 @@ export function mountVase(root) {
   vase.position.y = 0;
 
   /* the black lofted surface under the tiles */
-  const skinMat = new THREE.MeshPhysicalMaterial({ color: '#060606', roughness: .18, metalness: 0, clearcoat: 1, clearcoatRoughness: .08, side: THREE.DoubleSide });
+  /* kept matte: a glossy skin showed the key light as a bright streak through the gaps between tiles */
+  const skinMat = new THREE.MeshStandardMaterial({ color: '#060606', roughness: .85, metalness: 0, envMapIntensity: .2, side: THREE.DoubleSide });
   let skin = new THREE.Mesh(new THREE.BufferGeometry(), skinMat); vase.add(skin);
 
   /* the tiles: one instanced box */
