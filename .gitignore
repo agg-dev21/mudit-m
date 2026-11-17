@@ -5,3 +5,4 @@ desktop.ini
 *.bak-*
 *.tmp
 .claude/
+_src3d/*.glb

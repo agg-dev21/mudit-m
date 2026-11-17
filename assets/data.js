@@ -88,7 +88,7 @@ const SITE = {
   modelling: [
     { tool: 'Rhino & KeyShot', role: 'Modelling & rendering', slug: 'rhino-keyshot',
       page: {
-        intro: 'Every product here was surfaced in Rhino, and most were rendered in KeyShot. Model by model: how it sits in Rhino’s four views, then what KeyShot made of it.',
+        intro: 'Every product here was surfaced in Rhino, and most were rendered in KeyShot. Model by model: how it sits in Rhino’s four views, beside what KeyShot made of it. The last three have no KeyShot render, so they’re shown in a plain studio view drawn from his Rhino file.',
         models: [
           { project: 'electric-stove', name: 'Electric Stove — Concept 1', views: ASSETS + 'rhino4-stove-1.jpg?v=3',
             renders: [ { src: ASSETS + 'electric-stove-body-handle-s-01-28ab8b2915.jpg', cap: 'Final render' },
@@ -715,10 +715,17 @@ const PROJECTS = [
       renders: [ { src: ASSETS + 'rhino/a7-lifestyle-render.jpg', cap: 'Lifestyle render', wide: true },
                  { src: ASSETS + 'rhino/a7-printed-open.jpg', cap: 'Printed — open', tall: true },
                  { src: ASSETS + 'rhino/a7-printed-closed.jpg', cap: 'Printed — closed' } ] },
-    /* Rhino models with no KeyShot render yet: the four views only, drawn from his .3dm */
-    { name: 'Wall Fan Panel', views: ASSETS + 'rhino4-wall-fan.jpg', renders: [] },
-    { name: 'Trade Show Booth', views: ASSETS + 'rhino4-trade-booth.jpg', renders: [] },
-    { name: 'Spoon', views: ASSETS + 'rhino4-spoon.jpg', renders: [] }
+    /* Rhino models with no KeyShot render: a studio view lit for the site from his
+       own .3dm (his geometry and object colours, nothing added). Labelled as such. */
+    { name: 'Wall Fan Panel', views: ASSETS + 'rhino4-wall-fan.jpg', renders: [],
+      studio: [ { src: ASSETS + 'studio-wall-fan-1.jpg', cap: 'Three-quarter view' },
+                { src: ASSETS + 'studio-wall-fan-2.jpg', cap: 'From above' } ] },
+    { name: 'Trade Show Booth', views: ASSETS + 'rhino4-trade-booth.jpg', renders: [],
+      studio: [ { src: ASSETS + 'studio-trade-booth-1.jpg', cap: 'From the stair side' },
+                { src: ASSETS + 'studio-trade-booth-2.jpg', cap: 'At eye level' } ] },
+    { name: 'Spoon', views: ASSETS + 'rhino4-spoon.jpg', renders: [],
+      studio: [ { src: ASSETS + 'studio-spoon-1.jpg', cap: 'Three-quarter view' },
+                { src: ASSETS + 'studio-spoon-2.jpg', cap: 'In profile' } ] }
   );
 
   rk.coursework = {

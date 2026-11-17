@@ -845,15 +845,42 @@ html.has-cur,html.has-cur *{cursor:none!important}
   .tool-extra-grid{grid-template-columns:1fr}
 }
 
-.tool-model{padding-block:clamp(48px,6vw,96px);border-top:1px solid var(--line)}
-.tool-model:first-of-type{border-top:0}
-.tool-sub{margin:28px 0 12px}
-.tool-views{margin:0;border-radius:12px;overflow:hidden;background:#a6a6a6}
-.tool-views img{display:block;width:100%;height:auto}
-.tool-renders{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,1.6vw,22px);align-items:start}
-.tool-renders .m.wide{grid-column:1 / -1}
-.tool-renders .m.tall img{width:auto;max-width:100%;max-height:80svh}
-@media (max-width:760px){ .tool-renders{grid-template-columns:1fr} }
+/* Rhino & KeyShot: a jump list, then per model the Rhino views beside the
+   lead render, and any further pictures in a smaller row underneath */
+.tool-index{display:flex;flex-wrap:wrap;gap:8px;padding-bottom:clamp(16px,2vw,32px)}
+.tool-index button{
+  display:inline-flex;align-items:baseline;gap:8px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;
+  background:none;color:var(--ink-2);font:inherit;font-size:14px;cursor:pointer;transition:color .2s,border-color .2s;
+}
+.tool-index button:hover{color:var(--ink);border-color:var(--ink-3)}
+.tool-index em{font-style:normal;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.tool-model{padding-block:clamp(40px,5vw,80px);border-top:1px solid var(--line)}
+.tool-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,1.6vw,22px);align-items:start}
+.tool-pair.solo{grid-template-columns:1fr}
+/* a tall render (the Aerion tower) takes a narrow column at its own shape */
+.tool-pair.has-tall{grid-template-columns:minmax(0,2.3fr) minmax(0,1fr)}
+.tool-pair.has-tall .tool-lead img{aspect-ratio:auto;max-height:82svh;object-fit:contain}
+.tool-cell{margin:0;cursor:zoom-in}
+.tool-cell img{display:block;width:100%;aspect-ratio:16 / 10;object-fit:cover;border-radius:12px;background:var(--paper-2)}
+.tool-cell.tall img,.tool-views img{object-fit:contain}
+.tool-views img{background:#a9b1b9}
+.tool-cell figcaption{display:flex;gap:10px;align-items:baseline;margin-top:10px;font-size:13px;color:var(--ink-3)}
+.tool-cell figcaption .label{color:var(--ink-2)}
+.tool-more{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,1.6vw,22px);margin-top:clamp(16px,2vw,28px);align-items:start}
+.tool-more .tool-cell img{aspect-ratio:3 / 2}
+/* one or two extras line up under the pair's columns, at the pair's shape */
+.tool-more.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.tool-more.two .tool-cell img{aspect-ratio:16 / 10}
+.tool-note{margin-top:18px;font-size:13px;color:var(--ink-3);max-width:44em}
+@media (max-width:760px){
+  .tool-pair,.tool-pair.has-tall{grid-template-columns:1fr}
+  .tool-pair.has-tall .tool-lead img{width:auto;max-width:100%;max-height:68svh;margin-inline:auto}
+  .tool-more.two{grid-template-columns:1fr}
+  .tool-more{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tool-index{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .tool-index::-webkit-scrollbar{display:none}
+  .tool-index button{flex:none}
+}
 
 /* ============================================================= LIGHTBOX == */
 .lb{

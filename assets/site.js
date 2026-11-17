@@ -869,27 +869,41 @@ function renderTool(t) {
       <p class="gh-note">${esc(pg.vase.note)}</p>
     </section>` : ''}
 
-    ${(pg.models || []).map((x, n) => `
-    <section class="wrap tool-model rv">
+    ${pg.models?.length ? `
+    <nav class="wrap tool-index" aria-label="Models on this page">${pg.models.map((x, n) => `
+      <button type="button" data-jump="${n}"><span class="label">${pad(n + 1)}</span>${esc(x.name)}${x.renders?.length ? '' : '<em>Studio view</em>'}</button>`).join('')}
+    </nav>` : ''}
+
+    ${(pg.models || []).map((x, n) => {
+      /* the Rhino views sit beside the lead picture: his KeyShot render, or,
+         for a model he never rendered, a studio view drawn from his file */
+      const ks = x.renders || [], st = x.studio || [];
+      const lead = ks[0] ? { ...ks[0], kind: 'KeyShot' } : st[0] ? { ...st[0], kind: 'Studio view' } : null;
+      const rest = [
+        ...ks.slice(1).map(r => ({ ...r, kind: 'KeyShot' })),
+        ...(ks.length ? st : st.slice(1)).map(r => ({ ...r, kind: 'Studio view' })),
+        ...(x.own || []).map(r => ({ ...r, kind: 'His screenshot' }))
+      ];
+      const cell = (r, cls = '') => `
+        <figure class="tool-cell${cls}${r.tall ? ' tall' : ''}" data-cursor="zoom" data-full="${r.src}">
+          <img src="${r.src}" alt="${esc(x.name)}: ${esc(r.cap)}" loading="lazy">
+          <figcaption><span class="label">${r.kind}</span>${esc(r.cap)}</figcaption>
+        </figure>`;
+      return `
+    <section class="wrap tool-model rv" data-model="${n}">
       <div class="tool-pair-head">
         <p><span class="label">${pad(n + 1)}</span>${esc(x.name)}</p>
         ${link(x.project)}
       </div>
-      <p class="label tool-sub">In Rhino — top, perspective, front, right</p>
-      <figure class="tool-views" data-cursor="zoom" data-full="${x.views}">
-        <img src="${x.views}" alt="${esc(x.name)} in Rhino, four views" loading="lazy">
-      </figure>
-      ${x.renders?.length ? `
-      <p class="label tool-sub">Rendered in KeyShot</p>
-      <div class="tool-renders">${x.renders.map(r => `
-        <figure class="m${r.wide ? ' wide' : ''}${r.tall ? ' tall' : ''}"><img src="${r.src}" alt="${esc(r.cap)}" loading="lazy" data-cursor="zoom"><figcaption>${esc(r.cap)}</figcaption></figure>`).join('')}
-      </div>` : ''}
-      ${x.own?.length ? `
-      <p class="label tool-sub">His own screenshots</p>
-      <div class="tool-renders">${x.own.map(r => `
-        <figure class="m"><img src="${r.src}" alt="${esc(r.cap)}" loading="lazy" data-cursor="zoom"><figcaption>${esc(r.cap)}</figcaption></figure>`).join('')}
-      </div>` : ''}
-    </section>`).join('')}
+      <div class="tool-pair${lead ? (lead.tall ? ' has-tall' : '') : ' solo'}">
+        <figure class="tool-cell tool-views" data-cursor="zoom" data-full="${x.views}">
+          <img src="${x.views}" alt="${esc(x.name)} in Rhino, four views" loading="lazy">
+          <figcaption><span class="label">Rhino</span>Top, perspective, front, right</figcaption>
+        </figure>${lead ? cell(lead, ' tool-lead') : ''}
+      </div>
+      ${rest.length ? `<div class="tool-more${rest.length < 3 ? ' two' : ''}">${rest.map(r => cell(r)).join('')}</div>` : ''}
+      ${st.length ? `<p class="tool-note">Studio views are lit for this site from his Rhino file: his geometry and colours, not a KeyShot render.</p>` : ''}
+    </section>`; }).join('')}
 
     ${pg.coursework ? `
     <section class="wrap tool-course-head">
@@ -939,6 +953,12 @@ function renderTool(t) {
       </div>
     </section>`;
   observe(cs);
+  /* the model list at the top jumps down to that model */
+  $$('[data-jump]', cs).forEach(b => b.addEventListener('click', () => {
+    const el = cs.querySelector(`[data-model="${b.dataset.jump}"]`);
+    if (!el) return;
+    if (csLenis) csLenis.scrollTo(el, { offset: -70 }); else el.scrollIntoView({ behavior: REDUCED ? 'instant' : 'smooth' });
+  }));
   if (pg.vase) mountVaseInto($('#gh-vase'));
 }
 
