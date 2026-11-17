@@ -87,7 +87,7 @@ const SITE = {
   modelling: [
     { tool: 'Rhino & KeyShot', role: 'Modelling & rendering', slug: 'rhino-keyshot',
       page: {
-        intro: 'Every product here was surfaced in Rhino and rendered in KeyShot. Model by model: how it sits in Rhino’s four views, then what KeyShot made of it.',
+        intro: 'Every product here was surfaced in Rhino, and most were rendered in KeyShot. Model by model: how it sits in Rhino’s four views, then what KeyShot made of it.',
         models: [
           { project: 'electric-stove', name: 'Electric Stove — Concept 1', views: ASSETS + 'rhino4-stove-1.jpg?v=3',
             renders: [ { src: ASSETS + 'electric-stove-body-handle-s-01-28ab8b2915.jpg', cap: 'Final render' },
@@ -713,7 +713,11 @@ const PROJECTS = [
     { project: 'ear-container', name: 'Ear Container', views: ASSETS + 'rhino/a7-rhino-views.jpg',
       renders: [ { src: ASSETS + 'rhino/a7-lifestyle-render.jpg', cap: 'Lifestyle render', wide: true },
                  { src: ASSETS + 'rhino/a7-printed-open.jpg', cap: 'Printed — open', tall: true },
-                 { src: ASSETS + 'rhino/a7-printed-closed.jpg', cap: 'Printed — closed' } ] }
+                 { src: ASSETS + 'rhino/a7-printed-closed.jpg', cap: 'Printed — closed' } ] },
+    /* Rhino models with no KeyShot render yet: the four views only, drawn from his .3dm */
+    { name: 'Wall Fan Panel', views: ASSETS + 'rhino4-wall-fan.jpg', renders: [] },
+    { name: 'Trade Show Booth', views: ASSETS + 'rhino4-trade-booth.jpg', renders: [] },
+    { name: 'Spoon', views: ASSETS + 'rhino4-spoon.jpg', renders: [] }
   );
 
   rk.coursework = {

@@ -879,10 +879,11 @@ function renderTool(t) {
       <figure class="tool-views" data-cursor="zoom" data-full="${x.views}">
         <img src="${x.views}" alt="${esc(x.name)} in Rhino, four views" loading="lazy">
       </figure>
+      ${x.renders?.length ? `
       <p class="label tool-sub">Rendered in KeyShot</p>
       <div class="tool-renders">${x.renders.map(r => `
         <figure class="m${r.wide ? ' wide' : ''}${r.tall ? ' tall' : ''}"><img src="${r.src}" alt="${esc(r.cap)}" loading="lazy" data-cursor="zoom"><figcaption>${esc(r.cap)}</figcaption></figure>`).join('')}
-      </div>
+      </div>` : ''}
       ${x.own?.length ? `
       <p class="label tool-sub">His own screenshots</p>
       <div class="tool-renders">${x.own.map(r => `
