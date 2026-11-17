@@ -46,14 +46,15 @@ const SITE = {
     statement: 'Designing with curiosity',
     degree: 'BA Industrial Design, expected 2029',
     steps: [
-      { verb: 'Draw',   img: ASSETS + 'sketchbook/sk-marker-08.jpg', href: '#/tool/sketches', go: 'The sketchbook',
-        text: 'Marker and pencil first. Proportion, silhouette and grip get worked out on paper.' },
+      /* four different products, one for each step */
+      { verb: 'Draw',   img: ASSETS + 'electric-stove-body-handle-s-01-3db8b79518.jpg', href: '#/electric-stove', go: 'Electric Stove',
+        text: 'Pencil first. The electric stove’s body and silhouette were worked out on paper.' },
       { verb: 'Model',  img: ASSETS + 'rhino/a7-rhino-model.jpg', href: '#/ear-container', go: 'Ear Container',
         text: 'Then Rhino. The ear container’s body, lid, spiral and thread, each modelled as its own part.' },
       { verb: 'Render', img: ASSETS + 'rhino/a5-crown-lamp-render.jpg', href: '#/crown-lamp', go: 'Crown Lamp',
         text: 'KeyShot for material and light: gold, bronze and glass on the crown lamp.' },
-      { verb: 'Make',   img: ASSETS + 'rhino/a7-printed-open.jpg', href: '#/ear-container', go: 'Ear Container',
-        text: 'Then it gets printed. The same container, 3D printed, with a flatbed-printed wood-effect top.' }
+      { verb: 'Make',   img: ASSETS + 'washer-lamp-01.jpg', href: '#/washer-lamp', go: 'Washer Lamp',
+        text: 'Then by hand. The washer lamp was built from steel washers and wire.' }
     ],
     timeline: [
       { y: '2023', t: '2nd place, Design & Technology competition' },
