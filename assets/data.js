@@ -123,7 +123,7 @@ const SITE = {
       ] },
     { tool: 'Sketches',    role: 'Drawing', slug: 'sketches',
       page: {
-        intro: 'Every project starts on paper — proportions, silhouettes, grips and mechanisms worked out by hand before anything is modelled.',
+        intro: 'I think with a pen. The page follows how a project runs: finished concepts first, then the exploration behind them, then the drawing skills underneath. Perspective, marker rendering, orthographics, exploded views and mechanisms, all by hand.',
         sketches: [
           { src: ASSETS + 'electric-stove-body-handle-s-01-3db8b79518.jpg', project: 'electric-stove', cap: 'Body silhouettes' },
           { src: ASSETS + 'electric-stove-body-handle-s-01-146796ca89.jpg', project: 'electric-stove', cap: 'Handle profiles' },
@@ -773,32 +773,67 @@ const PROJECTS = [
   };
 
   const sk = SITE.modelling.find(t => t.slug === 'sketches').page;
+  const I = n => SK('idus226', n);
   sk.sections = [
-    { title: 'Ideation to exploded view',
-      text: 'A purifier ceiling fan, taken from thumbnails to a hand-drawn exploded view, alongside watch and cooktop explorations.',
-      items: run('exploded', 1, 6) },
-    { title: 'Marker rendering',
-      text: 'Adding colour, light and material with marker — cars and perfume bottles, chairs, watches, lamps, shoes and kettles, wood grain, and a plant in a lamp.',
-      items: run('marker', 1, 20) },
-    { title: 'Thumbnails & object studies',
-      text: 'Dense pages of objects drawn by the dozen — kettles, cookware, shoes, chairs — to build a visual library fast.',
-      items: run('studies', 1, 5) },
-    { title: 'Constructing products',
-      text: 'Box-first drawing: every product starts as a simple volume that is then cut, softened and detailed.',
-      items: run('construct', 1, 6) },
-    { title: 'Line & form drills',
-      text: 'A few of the warm-up pages: circles of every size, ellipses, soft organic volumes and quick car silhouettes.',
-      items: run('drills', 1, 4) },
-    { title: 'Final projects',
-      text: 'Final projects taken from pencil linework into marker: swim goggles with a quick-release mount for a hearing aid, a clip mechanism, a carry case with a power bank and splitter, and form studies with front, side and top views.',
+    { id: 'finished', title: 'Finished concepts', layout: 'feature',
+      shows: ['Product thinking', 'Marker rendering', 'Linework to render'],
+      text: 'Concepts taken all the way from pencil linework to marker render, with the details called out: how a part attaches, what opens, where the port sits, what the shape looks like from each side.',
       items: [
-        { src: SK('idus226', 1), cap: 'Goggles: quick-release hearing aid mount' },
-        { src: SK('idus226', 2), cap: 'Clip mechanism studies' },
-        { src: SK('idus226', 3), cap: 'Carry case: linework' },
-        { src: SK('idus226', 4), cap: 'Carry case: marker render' },
-        { src: SK('idus226', 5), cap: 'Chair concept on toned paper' },
-        { src: SK('idus226', 6), cap: 'Form study with orthographic views' },
-        { src: SK('idus226', 7), cap: 'Rounded form study: side and front views' }
-      ] }
+        { src: I(1), span: 6, tag: 'Marker + linework', cap: 'Swim goggles with a quick-release mount for a hearing aid' },
+        { src: I(4), span: 6, tag: 'Marker render', cap: 'Carry case: power bank, splitter and mesh pocket' },
+        { src: I(2), span: 6, tag: 'Mechanism', cap: 'Clip mechanism studies, closed and exploded' },
+        { src: I(3), span: 6, tag: 'Linework', cap: 'The same case in pencil, with callouts and USB-C input' },
+        { src: I(5), span: 7, tag: 'Marker on toned paper', cap: 'Chair concept with a seated figure for scale' },
+        { src: I(6), span: 5, tag: 'Marker + orthographics', cap: 'Form study with front, side and top views' },
+        { src: I(7), span: 12, tag: 'Marker + orthographics', cap: 'Rounded form study, with side and front views' }
+      ] },
+    { id: 'process', title: 'Ideation to exploded view', layout: 'feature',
+      shows: ['Ideation', 'Exploded views', 'Iteration'],
+      text: 'How an idea gets worked out. A purifier ceiling fan goes from thumbnails to a hand-drawn exploded view with every part named, beside watch and flat-product explorations that push one idea through many shapes.',
+      items: [
+        { src: SK('exploded', 1), span: 5, tag: 'Exploded view', cap: 'Purifier ceiling fan: parts, top and side views' },
+        { src: SK('exploded', 4), span: 7, tag: 'Ideation', cap: 'Watch form exploration' },
+        { src: SK('exploded', 2), span: 3, tag: 'Ideation', cap: 'Fan thumbnails: blades, canopy, filter' },
+        { src: SK('exploded', 3), span: 3, tag: 'Ideation', cap: 'Flat product thumbnails, parts labelled' },
+        { src: SK('exploded', 5), span: 3, tag: 'Annotated', cap: 'Watch concepts, features called out' },
+        { src: SK('exploded', 6), span: 3, tag: 'Shape options', cap: 'Watch and ring shapes, best in colour' }
+      ] },
+    { id: 'rendering', title: 'Marker rendering', fold: 9,
+      shows: ['Materials', 'Light and shadow', 'Range of products'],
+      text: 'Colour, light and material in marker: glossy paint, glass, fabric, polished metal and wood grain, across cars, chairs, watches, lamps, shoes and kettles.',
+      items: [
+        { src: SK('marker', 18), cap: 'Lamp with a plant, chrome and warm light' },
+        { src: SK('marker', 19), cap: 'Plant in a lamp' },
+        { src: SK('marker', 1), cap: 'Cars and perfume bottles' },
+        { src: SK('marker', 17), cap: 'Chairs and a table, wood and moulded shell' },
+        { src: SK('marker', 4), cap: 'Armchairs and a bag' },
+        { src: SK('marker', 3), cap: 'Plugs and tools on toned paper' },
+        { src: SK('marker', 16), cap: 'Wood grain, hammer and carafe' },
+        { src: SK('marker', 20), cap: 'Plant in a lamp, second study' },
+        { src: SK('marker', 2), cap: 'Primary forms and a chair' },
+        { src: SK('marker', 5), cap: 'Chairs' },
+        { src: SK('marker', 6), cap: 'Lounge chairs' },
+        { src: SK('marker', 7), cap: 'Watches' },
+        { src: SK('marker', 8), cap: 'Footwear' },
+        { src: SK('marker', 9), cap: 'Jugs and kettle' },
+        { src: SK('marker', 10), cap: 'Coffee makers and jugs' },
+        { src: SK('marker', 11), cap: 'Pendant lamps' },
+        { src: SK('marker', 12), cap: 'Table lamps' },
+        { src: SK('marker', 13), cap: 'Watches and a ring' },
+        { src: SK('marker', 14), cap: 'Watch straps and cases' },
+        { src: SK('marker', 15), cap: 'Wood grain samples and blocks' }
+      ] },
+    { id: 'construction', title: 'Constructing products',
+      shows: ['Perspective', 'Proportion', 'Volumes'],
+      text: 'Box-first drawing. Every product starts as a simple volume in perspective, then gets cut, softened and detailed, so the proportions are right before any detail goes in.',
+      items: run('construct', 1, 6) },
+    { id: 'thumbnails', title: 'Thumbnails and object studies',
+      shows: ['Volume of ideas', 'Visual library'],
+      text: 'Dense pages of objects drawn by the dozen, such as kettles, cookware, shoes and chairs, to build a visual library fast and see which shapes are worth developing.',
+      items: run('studies', 1, 5) },
+    { id: 'drills', title: 'Warm-ups', fold: 0,
+      shows: ['Line control', 'Ellipses'],
+      text: 'Circles of every size, ellipses, soft organic volumes and quick car silhouettes. The daily practice behind the cleaner pages above.',
+      items: run('drills', 1, 4) }
   ];
 })();

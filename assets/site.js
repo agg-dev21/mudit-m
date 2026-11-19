@@ -863,6 +863,12 @@ function renderTool(t) {
       <p class="cs-summary">${esc(pg.intro || t.note)}</p>
     </header>
 
+    ${pg.sections ? `
+    <nav class="wrap tool-index sk-index" aria-label="Sketch sections">${pg.sections.map((x, n) => `
+      <button type="button" data-skjump="${x.id}"><span class="label">${pad(n + 1)}</span>${esc(x.title)}</button>`).join('')}
+      ${pg.sketches?.length ? `<button type="button" data-skjump="projects"><span class="label">${pad(pg.sections.length + 1)}</span>From the case studies</button>` : ''}
+    </nav>` : ''}
+
     ${pg.vase ? `
     <section class="wrap gh-live">
       <div class="gh" id="gh-vase"><p class="holo-note">Loading the live vase…</p></div>
@@ -917,20 +923,28 @@ function renderTool(t) {
       <ul class="ch-files"><li><a href="${pg.coursework.book.href}" download><span>${esc(pg.coursework.book.label)}</span><em>${esc(pg.coursework.book.type)}</em></a></li></ul>
     </section>` : ''}` : ''}
 
-    ${(pg.sections || []).map((s, n) => `
-    <section class="wrap sk-sec">
+    ${(pg.sections || []).map((s, n) => {
+      const fold = s.fold != null ? s.fold : null;
+      const fig = (x, i) => `
+        <figure class="tool-sketch${x.span ? ' span-' + x.span : ''}${fold != null && i >= fold ? ' sk-extra' : ''}"${fold != null && i >= fold ? ' hidden' : ''}>
+          <img src="${x.src}" alt="${esc(x.cap || s.title)}" loading="lazy" data-cursor="zoom">
+          ${x.cap || x.tag ? `<figcaption><span>${esc(x.cap || '')}</span>${x.tag ? `<em class="label">${esc(x.tag)}</em>` : ''}</figcaption>` : ''}
+        </figure>`;
+      const extra = fold != null ? Math.max(0, s.items.length - fold) : 0;
+      return `
+    <section class="wrap sk-sec" id="sk-${s.id}">
       <div class="sk-head">
         <p class="label">${pad(n + 1)} / ${pad(pg.sections.length)}</p>
         <h2 class="tool-h2">${esc(s.title)}</h2>
         <p class="sk-text">${esc(s.text)}</p>
+        ${s.shows?.length ? `<ul class="sk-shows">${s.shows.map(w => `<li class="label">${esc(w)}</li>`).join('')}</ul>` : ''}
       </div>
-      <div class="sk-grid">${s.items.map(x => `
-        <figure class="tool-sketch"><img src="${x.src}" alt="${esc(s.title)}" loading="lazy" data-cursor="zoom">${x.cap ? `<figcaption>${esc(x.cap)}</figcaption>` : ''}</figure>`).join('')}
-      </div>
-    </section>`).join('')}
+      <div class="sk-grid${s.layout === 'feature' ? ' sk-feature' : ''}">${s.items.map(fig).join('')}</div>
+      ${extra ? `<button type="button" class="sk-more"><span class="label">${fold === 0 ? 'Show ' + extra + ' pages' : 'Show ' + extra + ' more'}</span></button>` : ''}
+    </section>`; }).join('')}
 
     ${pg.sketches?.length ? `
-    ${pg.sections ? `<section class="wrap sk-sec"><div class="sk-head"><p class="label">Project sketches</p><h2 class="tool-h2">From the projects</h2><p class="sk-text">Sketches made inside each case study, linked back to their project.</p></div></section>` : ''}
+    ${pg.sections ? `<section class="wrap sk-sec" id="sk-projects"><div class="sk-head"><p class="label">Project sketches</p><h2 class="tool-h2">From the projects</h2><p class="sk-text">Sketches made inside each case study, linked back to their project.</p></div></section>` : ''}
     <section class="wrap tool-wall">${pg.sketches.map(x => `
       <figure class="tool-sketch rv">
         <img src="${x.src}" alt="${esc(x.cap)}" loading="lazy" data-cursor="zoom">
@@ -953,6 +967,16 @@ function renderTool(t) {
       </div>
     </section>`;
   observe(cs);
+  /* sketches: jump list, and the folded groups */
+  $$('[data-skjump]', cs).forEach(b => b.addEventListener('click', () => {
+    const el = cs.querySelector('#sk-' + b.dataset.skjump);
+    if (!el) return;
+    if (csLenis) csLenis.scrollTo(el, { offset: -70 }); else el.scrollIntoView({ behavior: REDUCED ? 'instant' : 'smooth' });
+  }));
+  $$('.sk-more', cs).forEach(b => b.addEventListener('click', () => {
+    $$('.sk-extra', b.closest('.sk-sec')).forEach(f => f.hidden = false);
+    b.remove();
+  }));
   /* the model list at the top jumps down to that model */
   $$('[data-jump]', cs).forEach(b => b.addEventListener('click', () => {
     const el = cs.querySelector(`[data-model="${b.dataset.jump}"]`);

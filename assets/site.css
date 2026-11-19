@@ -1220,3 +1220,20 @@ html.has-cur,html.has-cur *{cursor:none!important}
   background:linear-gradient(90deg,#3a2363 0%,#3d3fc8 22%,#4f9dff 42%,#3fdcb4 58%,#c9e24a 72%,#ffa533 86%,#ff4a1f 100%)}
 .gh-key span{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:#55575b}
 .gh-key em{font-style:normal}
+
+/* sketches: curated layout */
+.sk-shows{grid-column:2;display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;padding:0;list-style:none}
+.sk-shows li{border:1px solid var(--line);border-radius:999px;padding:6px 12px;color:var(--ink-2)}
+.sk-feature{columns:auto;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(12px,1.6vw,24px);align-items:start}
+.sk-feature .tool-sketch{margin:0;grid-column:span 6}
+.sk-feature .span-3{grid-column:span 3}.sk-feature .span-5{grid-column:span 5}.sk-feature .span-6{grid-column:span 6}.sk-feature .span-7{grid-column:span 7}.sk-feature .span-12{grid-column:span 12}
+.tool-sketch figcaption em{font-style:normal;white-space:nowrap;color:var(--ink-3)}
+@media (max-width:900px){.sk-feature .span-3{grid-column:span 6}}
+.tool-sketch[hidden]{display:none}
+.sk-more{display:block;margin:clamp(20px,2.4vw,36px) auto 0;padding:14px 26px;border:1px solid var(--line);border-radius:999px;color:var(--ink);background:none;cursor:pointer;transition:background .3s var(--ease),border-color .3s var(--ease)}
+.sk-more:hover{background:rgba(255,255,255,.06);border-color:var(--ink-3)}
+.sk-index{padding-top:clamp(28px,3vw,48px)}
+@media (max-width:900px){
+  .sk-shows{grid-column:1}
+  .sk-feature .tool-sketch,.sk-feature .span-3,.sk-feature .span-5,.sk-feature .span-6,.sk-feature .span-7{grid-column:span 12}
+}
