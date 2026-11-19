@@ -1034,7 +1034,7 @@ html.has-cur,html.has-cur *{cursor:none!important}
   .reel-meta,
   .stack-cta{
     background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03));
-    -webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
     border:1px solid rgba(255,255,255,.12);
     box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 30px rgba(0,0,0,.35);
   }
@@ -1047,7 +1047,7 @@ html.has-cur,html.has-cur *{cursor:none!important}
   /* menu: the page shows through, blurred and dimmed */
   .menu{
     background:rgba(14,14,15,.58);
-    -webkit-backdrop-filter:blur(30px) saturate(160%);backdrop-filter:blur(30px) saturate(160%);
+    -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
   }
 
   /* reel: the counter becomes a capsule over the front card */
@@ -1236,4 +1236,30 @@ html.has-cur,html.has-cur *{cursor:none!important}
 @media (max-width:900px){
   .sk-shows{grid-column:1}
   .sk-feature .tool-sketch,.sk-feature .span-3,.sk-feature .span-5,.sk-feature .span-6,.sk-feature .span-7{grid-column:span 12}
+}
+
+/* ===== phone: lighter to paint, same look ===== */
+@media (max-width:760px){
+  /* the blurred copy behind a contained picture: a smaller blur on a phone GPU reads the same */
+  .stack-photo .blur,.cs-intro-img .blur{filter:blur(24px)}
+}
+
+/* the 3D model waits for a tap on a phone */
+.viewer-start{
+  position:absolute;inset:0;width:100%;display:flex;align-items:center;justify-content:center;
+  background:#1a1a1c center/cover no-repeat;cursor:pointer;color:var(--ink);border:0;padding:0;
+}
+.viewer-start::before{content:"";position:absolute;inset:0;background:rgba(10,10,11,.55)}
+.viewer-start-in{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px}
+.viewer-start-in b{font-weight:500;font-size:16px;padding:12px 20px;border-radius:999px;border:1px solid rgba(236,235,230,.35);background:rgba(14,14,15,.5)}
+
+/* tool pages on a phone: the pictures come first, so the words above them stay short */
+@media (max-width:760px){
+  .tool-head{padding-block:24px 4px}
+  .tool-head .cs-summary{font-size:16px;line-height:1.5}
+  .sk-index{padding-top:6px;padding-bottom:0}
+  .sk-sec{padding-top:34px}
+  .sk-head{padding-bottom:14px}
+  .sk-shows{display:none}
+  .sk-text{font-size:15px;line-height:1.5}
 }

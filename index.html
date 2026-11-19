@@ -22,9 +22,11 @@
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
 } }
 </script>
-<link rel="stylesheet" href="assets/site.css?v=1794885913">
+<link rel="stylesheet" href="assets/site.css?v=1795100001">
 <!-- the opening flash plays once per visit; skipped for a deep link or reduced motion -->
-<script>try{if(sessionStorage.getItem('intro')||location.hash.indexOf('#/')===0||matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('no-intro')}catch(e){}</script>
+<script>try{if(sessionStorage.getItem('intro')||location.hash.indexOf('#/')===0||matchMedia('(prefers-reduced-motion: reduce), (max-width: 760px)').matches||(navigator.connection&&navigator.connection.saveData))document.documentElement.classList.add('no-intro')}catch(e){}</script>
+<!-- phone: the first picture of the reel starts loading right away (keep in step with SITE.carousel[0] in assets/data.js) -->
+<link rel="preload" as="image" type="image/webp" media="(max-width: 760px)" href="assets/m/electric-stove-body-handle-s-01-28ab8b2915.webp" fetchpriority="high">
 </head>
 <body>
 <div class="intro" id="intro" aria-hidden="true">
@@ -119,7 +121,7 @@
       </div>
       <figure class="me" id="me">
         <span class="me-disc" id="me-disc"></span>
-        <img class="me-img" id="me-img" alt="Mudit Manocha">
+        <img class="me-img" id="me-img" alt="Mudit Manocha" loading="lazy" decoding="async">
       </figure>
     </div>
   </section>
@@ -153,8 +155,7 @@
 
 <div class="lb" id="lb" role="dialog" aria-label="Image viewer" data-cursor="close"><img id="lb-img" alt=""></div>
 
-<script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-<script defer src="assets/data.js?v=1794885913"></script>
-<script defer src="assets/site.js?v=1794885913"></script>
+<script defer src="assets/data.js?v=1795100001"></script>
+<script defer src="assets/site.js?v=1795100001"></script>
 </body>
 </html>

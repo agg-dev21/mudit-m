@@ -21,18 +21,56 @@ const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const FINE    = matchMedia('(hover: hover) and (pointer: fine)').matches;
 const PHONE   = matchMedia('(max-width: 760px)');          // the phone layout
 const bySlug  = s => PROJECTS.find(p => p.slug === s);
+/* a phone, or any connection that says it is slow or saving data: show the work
+   first, and keep the heavy extras (3D models, smooth-scroll library) for a tap or a mouse */
+const SAVE = !!(navigator.connection && (navigator.connection.saveData || /(^|-)(2g|3g)$/.test(navigator.connection.effectiveType || '')));
+const LITE = () => PHONE.matches || SAVE;
+
+/* phone: pictures come from assets/m/, phone-sized WebP copies made by
+   tools/make-mobile-images.py. A missing copy falls back to the original,
+   and tapping a picture to zoom still opens the full-size one. */
+const mob = src => {
+  if (!PHONE.matches || typeof src !== 'string') return src;
+  const m = src.match(/^(?:\.\/)?assets\/(?!m\/|models\/|rhino-files\/)(.+?)\.(?:jpe?g|png)(\?.*)?$/i);
+  return m ? `assets/m/${m[1]}.webp${m[2] || ''}` : src;
+};
+function mobilize(im) {
+  if (im.dataset.orig || im.closest('.cur, .lb')) return;
+  const was = im.getAttribute('src'), now = mob(was);
+  if (!was || now === was) return;
+  im.dataset.orig = was; im.decoding = 'async';
+  im.addEventListener('error', () => { if (im.getAttribute('src') !== was) im.src = was; }, { once: true });
+  im.src = now;
+}
+/* any phone copy that fails to load falls back to the original picture */
+document.addEventListener('error', e => {
+  const im = e.target;
+  if (im.tagName === 'IMG' && im.dataset.orig && im.getAttribute('src') !== im.dataset.orig) im.src = im.dataset.orig;
+}, true);
+if (PHONE.matches) new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => {
+  if (n.nodeType !== 1) return;
+  if (n.tagName === 'IMG') mobilize(n); else n.querySelectorAll?.('img').forEach(mobilize);
+}))).observe(document.body, { childList: true, subtree: true });
 
 document.title = `${SITE.name} — Industrial Designer`;
 
 /* ======================================================== SMOOTH SCROLL == */
-const lenis = (window.Lenis && !REDUCED)
-  ? new Lenis({ lerp: .085, smoothWheel: true, wheelMultiplier: 1 })
-  : null;
-
-/* the case study scrolls in its own layer, with its own smooth scroll */
-const csLenis = (window.Lenis && !REDUCED)
-  ? new Lenis({ wrapper: document.getElementById('cs'), content: document.getElementById('cs'), lerp: .09, smoothWheel: true })
-  : null;
+/* Smooth scroll is for a mouse or trackpad. Touch screens scroll natively, so a
+   phone never downloads the library; on a desktop it loads without holding the
+   page back. */
+let lenis = null, csLenis = null;
+if (FINE && !REDUCED) {
+  const sc = document.createElement('script');
+  sc.src = 'https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js';
+  sc.onload = () => {
+    if (!window.Lenis || lenis) return;
+    lenis = new Lenis({ lerp: .085, smoothWheel: true, wheelMultiplier: 1 });
+    /* the case study scrolls in its own layer, with its own smooth scroll */
+    csLenis = new Lenis({ wrapper: document.getElementById('cs'), content: document.getElementById('cs'), lerp: .09, smoothWheel: true });
+    if (document.getElementById('cs').classList.contains('open')) lenis.stop();
+  };
+  document.head.appendChild(sc);
+}
 
 let csH = 0;
 
@@ -187,8 +225,8 @@ function buildStack() {
     const contain = p.winFit === 'contain';
     const bg = contain && p.winBg && p.winBg !== 'blur' ? ` style="background:${p.winBg}"` : '';
     const photo = contain
-      ? `${p.winBg === 'blur' ? `<img class="blur" src="${src}" alt="">` : ''}<img class="main" src="${src}" alt="${esc(p.name)}" loading="lazy">`
-      : `<img src="${src}" alt="${esc(p.name)}" loading="lazy" style="object-position:${p.winPos || 'center'}">`;
+      ? `${p.winBg === 'blur' ? `<img class="blur" src="${src}" alt="">` : ''}<img class="main" src="${src}" alt="${esc(p.name)}" loading="lazy" fetchpriority="low">`
+      : `<img src="${src}" alt="${esc(p.name)}" loading="lazy" fetchpriority="low" style="object-position:${p.winPos || 'center'}">`;
     return `
     <span class="stack-anchor" id="p-${p.slug}"></span>
     <div class="stack-card">
@@ -292,12 +330,17 @@ function buildModelling() {
     if (e.target.closest('a')) return;
     location.hash = r.dataset.href;
   }));
-  /* on a phone every row shows its own picture; a gallery row turns through its pieces */
+  /* on a phone every row shows its own picture; a gallery row turns through its
+     pieces, but only while it is on screen */
   rows.forEach(r => {
     const ps = $$('.model-pic img', r);
     if (ps.length < 2) { ps[0]?.classList.add('on'); return; }
-    let k = 0; ps[0].classList.add('on');
-    if (!REDUCED) setInterval(() => { ps[k].classList.remove('on'); k = (k + 1) % ps.length; ps[k].classList.add('on'); }, 2600);
+    let k = 0, t = 0; ps[0].classList.add('on');
+    const tick = () => { ps[k].classList.remove('on'); k = (k + 1) % ps.length; ps[k].classList.add('on'); };
+    if (!REDUCED && !SAVE) new IntersectionObserver(es => es.forEach(e => {
+      clearInterval(t);
+      if (e.isIntersecting) t = setInterval(() => { if (!document.hidden) tick(); }, 2600);
+    }), { threshold: .3 }).observe(r);
   });
   if (FINE) rows.forEach(r => r.addEventListener('pointerenter', () => show(+r.dataset.i)));
   else {
@@ -322,9 +365,19 @@ function buildReel() {
   const items = SITE.carousel.map(c => ({ ...c, p: bySlug(c.project) })).filter(c => c.p);
   reel.innerHTML = items.map((c, i) => `
     <a class="reel-card" href="#/${c.p.slug}" data-i="${i}">
-      <img src="${c.img}" alt="${esc(c.p.name)}" loading="${i < 3 ? 'eager' : 'lazy'}">
+      <img ${PHONE.matches && i > 2 ? 'data-' : ''}src="${mob(c.img)}" alt="${esc(c.p.name)}" loading="${i < 2 ? 'eager' : 'lazy'}"${i === 0 ? ' fetchpriority="high"' : ''}${PHONE.matches ? ` data-orig="${c.img}"` : ''}>
     </a>`).join('');
   const cards = $$('.reel-card', reel);
+  /* the first three cards load at once; the rest only as the swipe nears them,
+     so they don't compete with the first picture on a slow connection */
+  const later = $$('img[data-src]', reel);
+  if (later.length) {
+    const near = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      const im = e.target; near.unobserve(im); im.src = im.dataset.src;
+    }), { root: reel, rootMargin: '0px 90% 0px 90%' });
+    later.forEach(im => near.observe(im));
+  }
   let active = -1, touched = false;
 
   const paint = () => {
@@ -433,7 +486,8 @@ function buildContact() {
     ...SITE.socials.map(s => `<a class="ul" href="${s.url}" target="_blank" rel="noopener">${esc(s.label)}</a>`),
     `<a class="ul" href="${SITE.resume}" target="_blank" rel="noopener">Résumé</a>`
   ].join('');
-  $('#me-img').src = SITE.portrait;
+  $('#me-img').dataset.orig = SITE.portrait;
+  $('#me-img').src = mob(SITE.portrait);
   io.observe($('#me'));
 
   $('#foot-l').textContent = `© ${new Date().getFullYear()} ${SITE.name}`;
@@ -545,8 +599,8 @@ function renderCase(p) {
         ${factsHTML}
       </div>
       <figure class="cs-intro-img${contain ? ' contain' : ''}"${heroBg} data-cursor="zoom" data-full="${hero}">
-        ${contain && p.winBg === 'blur' ? `<img class="blur" src="${hero}" alt="">` : ''}
-        <img class="main" src="${hero}" alt="${esc(p.name)}">
+        ${contain && p.winBg === 'blur' ? `<img class="blur" src="${mob(hero)}" alt=""${PHONE.matches ? ` data-orig="${hero}"` : ''}>` : ''}
+        <img class="main" src="${mob(hero)}" alt="${esc(p.name)}" fetchpriority="high"${PHONE.matches ? ` data-orig="${hero}"` : ''}>
       </figure>
     </header>`;
 
@@ -683,35 +737,51 @@ function dropHologram() { activeHolo?.dispose(); activeHolo = null; sx = null; }
 /* the model on the page itself: it loads as it comes near, and as it
    scrolls through it comes together from apart and turns a little; left
    alone, it turns slowly on its own */
+const GLB_MB = { 'cochlear': 0.4, 'study-headrest': 0.1, 'study-lamp': 5.5, 'stove-concept-1': 0.2, 'aerion-one': 2.1, 'study-plate': 0.8, 'crown-lamp': 8.3, 'watch-table': 2.5, 'ear-container': 0.9 };   // model sizes, so the tap-to-load button can say what it costs
 let inline = null;
 function dropInline() { inline?.holo?.dispose(); inline = null; }
+/* the model's start: on a wide screen it loads as the page comes near; on a phone or
+   a slow connection it waits for a tap, because a model can be several MB */
+function startInline() {
+  const me = inline;
+  if (!me || me.holo || me.loading) return;
+  me.loading = true;
+  me.stage.innerHTML = me.manual ? '<p class="holo-note">Loading the 3D model…</p>' : '';
+  import(VIEWER_JS).then(({ mountViewer }) => {
+    if (inline !== me) return;
+    me.stage.innerHTML = '';
+    me.holo = mountViewer(me.stage, { model: me.p.models[me.model || 0].src, type: 'glb', autoTurn: false });
+    me.holo.ready?.catch(() => { me.stage.innerHTML = holoNote(); });
+  }).catch(() => { me.stage.innerHTML = holoNote(); });
+}
 function bindInline(p) {
   dropInline();
   const stage = $('#inline-stage'), box = stage.parentElement;
-  inline = { p, stage, box, holo: null, loading: false, lastP: -1, still: performance.now(), spin: 0, at: performance.now() };
+  inline = { p, stage, box, holo: null, loading: false, lastP: -1, still: performance.now(), spin: 0, at: performance.now(),
+             manual: LITE(), model: 0 };
+  if (inline.manual) {
+    const mb = GLB_MB[p.models[0].src.split('?')[0].split('/').pop().replace('.glb', '')];
+    stage.innerHTML = `<button type="button" class="viewer-start" style="background-image:url('${mob(p.win || p.cover)}')">
+      <span class="viewer-start-in"><span class="label">3D model</span><b>Tap to explore${mb ? ` · ${mb} MB` : ''}</b></span></button>`;
+    $('.viewer-start', stage).addEventListener('click', startInline);
+  }
   /* Explode by hand holds it apart; off again, the scroll has it back */
   const ex = $('[data-inline-explode]', box);
   ex.addEventListener('click', () => {
+    startInline();
     inline.held = ex.getAttribute('aria-pressed') !== 'true';
     ex.setAttribute('aria-pressed', String(inline.held)); ex.classList.toggle('on', inline.held);
   });
   $$('[data-inline-model]', box).forEach(b => b.addEventListener('click', () => {
     $$('[data-inline-model]', box).forEach(x => x.classList.toggle('on', x === b));
-    inline?.holo?.showModel(p.models[+b.dataset.inlineModel].src, 'glb');
+    if (inline) inline.model = +b.dataset.inlineModel;
+    if (inline?.holo) inline.holo.showModel(p.models[+b.dataset.inlineModel].src, 'glb'); else startInline();
   }));
 }
 function inlineFrame() {
   if (!inline) return;
   const r = inline.box.getBoundingClientRect();
-  if (!inline.holo && !inline.loading && r.top < innerHeight * 1.6) {
-    inline.loading = true;
-    const me = inline;
-    import(VIEWER_JS).then(({ mountViewer }) => {
-      if (inline !== me) return;
-      me.holo = mountViewer(me.stage, { model: me.p.models[0].src, type: 'glb', autoTurn: false });
-      me.holo.ready?.catch(() => { me.stage.innerHTML = holoNote(); });
-    }).catch(() => { me.stage.innerHTML = holoNote(); });
-  }
+  if (!inline.holo && !inline.loading && !inline.manual && r.top < innerHeight * 1.6) startInline();
   /* 0 as it comes in at the bottom, 1 as it leaves at the top */
   const t = clamp((innerHeight - r.top) / (innerHeight + r.height), 0, 1);
   inline.box.style.setProperty('--in', clamp(t / .35, 0, 1).toFixed(3));
@@ -1178,6 +1248,10 @@ function meFrame() {
 }
 
 /* =================================================================== LOOP == */
+let awake = 90;                                   /* frames of work left after the last scroll, tap or resize */
+const wake = () => { awake = 90; };
+['scroll', 'resize', 'hashchange'].forEach(ev => addEventListener(ev, wake, { passive: true }));
+addEventListener('touchstart', wake, { passive: true });
 function loop(time) {
   lenis?.raf(time);
   if (cs.classList.contains('open')) {
@@ -1185,6 +1259,12 @@ function loop(time) {
        scroll has to know, or it stops at the old end */
     if (csLenis && cs.scrollHeight !== csH) { csH = cs.scrollHeight; csLenis.resize(); }
     csLenis?.raf(time); x3dLenis?.raf(time); sxFrame(); inlineFrame();
+  }
+  if (PHONE.matches && !cs.classList.contains('open')) {
+    /* a phone has no ring, cursor or lean to animate: idle until the page moves */
+    if (awake > 0) { awake--; stackFrame(); navFrame(); meFrame(); }
+    requestAnimationFrame(loop);
+    return;
   }
   ringFrame(time);
   stackFrame();
@@ -1227,7 +1307,7 @@ function bindLightbox() {
   document.addEventListener('click', e => {
     const z = e.target.closest('[data-cursor="zoom"]');
     if (!z) return;
-    img.src = z.dataset.full || z.currentSrc || z.src;
+    img.src = z.dataset.full || z.dataset.orig || z.currentSrc || z.src;
     lb.classList.add('open');
     cursorSet(lb);
   });
@@ -1243,7 +1323,9 @@ function bindLightbox() {
 
 /* ================================================================ BOOT == */
 buildHero();
-buildRing();
+/* the ring is the wide-screen hero; a phone has the reel, so it isn't built (or loaded) there */
+if (!PHONE.matches) buildRing();
+else PHONE.addEventListener('change', e => { if (!e.matches && !RING.cards.length) buildRing(); });
 buildStack();
 buildModelling();
 buildReel();
@@ -1268,7 +1350,7 @@ requestAnimationFrame(loop);
   }
   try { sessionStorage.setItem('intro', '1'); } catch (e) {}
   document.body.classList.add('locked');
-  const count = $('.intro-count', el), line = $('.intro-line', el), t0 = performance.now(), RUN = 900;
+  const count = $('.intro-count', el), line = $('.intro-line', el), t0 = performance.now(), RUN = 600;
   const step = now => {
     const k = Math.min(1, (now - t0) / RUN), e = 1 - Math.pow(1 - k, 3);
     count.textContent = String(Math.round(e * 100)).padStart(2, '0');
@@ -1277,9 +1359,9 @@ requestAnimationFrame(loop);
     setTimeout(() => {
       el.classList.add('open');
       document.body.classList.remove('locked');
-      setTimeout(ready, 250);
-      setTimeout(() => el.remove(), 1000);
-    }, 120);
+      setTimeout(ready, 200);
+      setTimeout(() => el.remove(), 900);
+    }, 60);
   };
   requestAnimationFrame(step);
 })();

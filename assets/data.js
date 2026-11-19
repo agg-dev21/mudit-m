@@ -123,7 +123,7 @@ const SITE = {
       ] },
     { tool: 'Sketches',    role: 'Drawing', slug: 'sketches',
       page: {
-        intro: 'I think with a pen. The page follows how a project runs: finished concepts first, then the exploration behind them, then the drawing skills underneath. Perspective, marker rendering, orthographics, exploded views and mechanisms, all by hand.',
+        intro: 'I think with a pen. Finished concepts first, then the exploration behind them, then the drawing skills underneath.',
         sketches: [
           { src: ASSETS + 'electric-stove-body-handle-s-01-3db8b79518.jpg', project: 'electric-stove', cap: 'Body silhouettes' },
           { src: ASSETS + 'electric-stove-body-handle-s-01-146796ca89.jpg', project: 'electric-stove', cap: 'Handle profiles' },

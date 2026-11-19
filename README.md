@@ -192,3 +192,23 @@ images slot straight in beside the right text.
 - Projects 07-09 (Crown Lamp, Watch Table, Ear Container) are the larger Rhino/KeyShot assignments, each with 3D models in `assets/models`. The smaller first-term assignments live on the Rhino & KeyShot tool page (`rk.coursework` at the bottom of `data.js`).
 - A chapter can carry `files: [{ label, type, href }]`: a download list shown under its text. Source files are in `assets/rhino-files`. The 137 MB KeyShot scene is deliberately not included.
 - The Sketches page reads `page.sections` (also at the bottom of `data.js`); the images are in `assets/sketchbook`.
+
+## Phones
+
+The site is built to show the work first on a phone: no opening flash, no ring
+(the swipeable reel is used instead), no smooth-scroll library, 3D models wait
+for a tap, and pictures come from phone-sized WebP copies in `assets/m/`.
+
+After adding or changing pictures, run once:
+
+```
+pip install pillow
+python3 tools/make-mobile-images.py
+```
+
+If a phone copy is missing the site just uses the original, so nothing breaks.
+Tapping a picture to zoom always opens the full-size original.
+
+The first picture of the phone reel is preloaded from `index.html`
+(`<link rel="preload" ... assets/m/...>`). If you change the first photo in
+`SITE.carousel`, update that one line to match.
