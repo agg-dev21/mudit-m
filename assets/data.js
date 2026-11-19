@@ -789,8 +789,8 @@ const PROJECTS = [
     { title: 'Line & form drills',
       text: 'A few of the warm-up pages: circles of every size, ellipses, soft organic volumes and quick car silhouettes.',
       items: run('drills', 1, 4) },
-    { title: 'IDUS 226 final projects',
-      text: 'The final projects from IDUS 226, taken from pencil linework into marker: swim goggles with a quick-release mount for a hearing aid, a clip mechanism, a carry case with a power bank and splitter, and form studies with front, side and top views.',
+    { title: 'Final projects',
+      text: 'Final projects taken from pencil linework into marker: swim goggles with a quick-release mount for a hearing aid, a clip mechanism, a carry case with a power bank and splitter, and form studies with front, side and top views.',
       items: [
         { src: SK('idus226', 1), cap: 'Goggles: quick-release hearing aid mount' },
         { src: SK('idus226', 2), cap: 'Clip mechanism studies' },
