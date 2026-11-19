@@ -789,16 +789,16 @@ const PROJECTS = [
     { title: 'Line & form drills',
       text: 'A few of the warm-up pages: circles of every size, ellipses, soft organic volumes and quick car silhouettes.',
       items: run('drills', 1, 4) },
-    { title: 'IDUS 225',
-      text: 'Pencil linework taken into marker: swim goggles with a quick-release mount for a hearing aid, a clip mechanism, a carry case with a power bank and splitter, and form studies with front, side and top views.',
+    { title: 'IDUS 226 final projects',
+      text: 'The final projects from IDUS 226, taken from pencil linework into marker: swim goggles with a quick-release mount for a hearing aid, a clip mechanism, a carry case with a power bank and splitter, and form studies with front, side and top views.',
       items: [
-        { src: SK('idus225', 1), cap: 'Goggles: quick-release hearing aid mount' },
-        { src: SK('idus225', 2), cap: 'Clip mechanism studies' },
-        { src: SK('idus225', 3), cap: 'Carry case: linework' },
-        { src: SK('idus225', 4), cap: 'Carry case: marker render' },
-        { src: SK('idus225', 5), cap: 'Chair concept on toned paper' },
-        { src: SK('idus225', 6), cap: 'Form study with orthographic views' },
-        { src: SK('idus225', 7), cap: 'Rounded form study: side and front views' }
+        { src: SK('idus226', 1), cap: 'Goggles: quick-release hearing aid mount' },
+        { src: SK('idus226', 2), cap: 'Clip mechanism studies' },
+        { src: SK('idus226', 3), cap: 'Carry case: linework' },
+        { src: SK('idus226', 4), cap: 'Carry case: marker render' },
+        { src: SK('idus226', 5), cap: 'Chair concept on toned paper' },
+        { src: SK('idus226', 6), cap: 'Form study with orthographic views' },
+        { src: SK('idus226', 7), cap: 'Rounded form study: side and front views' }
       ] }
   ];
 })();
