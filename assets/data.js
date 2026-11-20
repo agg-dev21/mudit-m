@@ -33,7 +33,7 @@ const SITE = {
   location:  'Savannah, GA',
   school:    'SCAD',
   email:     'muditmanocha2@gmail.com',
-  resume:    ASSETS + 'resume-acea587ec7.pdf',
+  resume:    ASSETS + 'Mudit_Manocha_Resume.pdf',
   logo:      ASSETS + 'logo-a3dca4ae30.jpg',
   portrait:  ASSETS + 'portrait-2f12f6d817.png',
   aboutBg:   ASSETS + 'about-bg-da845aacdf.jpg',
