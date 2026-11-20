@@ -190,8 +190,8 @@ const PROJECTS = [
   cover: IMG('stove/stove-cover.jpg'),
   win:   IMG('stove/stove-cover.jpg'), winPos: 'center 55%',
   hero:  IMG('electric-stove-body-handle-s-01-8c9577cd6f.jpg'),
-  models: [ { label: 'Concept 1', src: ASSETS + 'models/stove-concept-1.glb?v=2' },
-            { label: 'Concept 2', src: ASSETS + 'models/stove-concept-2.glb?v=2' } ],   // real Rhino models
+  models: [ { label: 'Concept 1', src: ASSETS + 'models/stove-concept-1.glb?v=2&x=layers' },
+            { label: 'Concept 2', src: ASSETS + 'models/stove-concept-2.glb?v=2&x=layers' } ],   // real Rhino models
   /* the scroll goes through both concepts: each one whole, then apart */
   scenes: [
     { k: 'The problem', model: 0, yaw: .85, tilt: .12,
@@ -279,7 +279,7 @@ const PROJECTS = [
   cover: IMG('cochlear-implant-fit-enhance-03-b945f64a88.jpg'),
   win:   IMG('cochlear-implant-fit-enhance-03-b945f64a88.jpg'), winPos: 'center 35%',
   hero:  IMG('cochlear-implant-fit-enhance-03-b945f64a88.jpg'),
-  models: [ { label: 'Clip', src: ASSETS + 'models/cochlear.glb' } ],
+  models: [ { label: 'Clip', src: ASSETS + 'models/cochlear.glb?x=layers' } ],
 
   summary: 'An assistive accessory for cochlear implant users who also wear glasses, designed from my own daily experience with fit and pressure issues.',
   glance: {
@@ -367,7 +367,7 @@ const PROJECTS = [
   cover: IMG('chair/chair-cover.jpg'),
   win:   IMG('chair/chair-cover.jpg'),
   hero:  IMG('chair/chair-cover.jpg'),
-  models: [ { label: 'Study model', src: ASSETS + 'models/study-headrest.glb?v=4', study: true } ],   // built from the CAD sheets, not his file
+  models: [ { label: 'Study model', src: ASSETS + 'models/study-headrest.glb?v=4&x=slide', study: true } ],   // built from the CAD sheets, not his file
 
   summary: 'A concept for the internal workings of a headrest: a release-and-locking mechanism that lets you swap the headrest when it no longer suits you, or take the back support off, by hand.',
   glance: {
@@ -434,7 +434,7 @@ const PROJECTS = [
   cover: IMG('lamp/lamp-02.jpg'),
   win:   IMG('lamp/lamp-cover.jpg'),
   hero:  IMG('lamp/lamp-cover.jpg'),
-  models: [ { label: 'Study model', src: ASSETS + 'models/study-lamp.glb', study: true } ],        // built from the photo, not his file
+  models: [ { label: 'Study model', src: ASSETS + 'models/study-lamp.glb?x=tiers', study: true } ],        // built from the photo, not his file
 
   /* text and pictures follow his Adobe Portfolio page (/lamp), in its order */
   summary: 'Exploring how a single mass-produced component can create texture, form, and light patterns.',
@@ -481,9 +481,9 @@ const PROJECTS = [
   tools: ['Sketching', 'SketchUp', 'Rhino 8', 'KeyShot', 'Premiere Pro'],
   materials: 'Olive metal, copper, smoked acrylic',
   cover: IMG('aerion/a26-cover.jpg'),
-  win:   IMG('aerion/a26-cover.jpg'), winFit: 'contain', winBg: 'blur',
+  win:   IMG('aerion/a26-card.jpg'), winPos: 'center',   // composed for the card from his final render
   hero:  IMG('aerion/a26-cover.jpg'),
-  models: [ { label: 'Aerion One', src: ASSETS + 'models/aerion-one.glb?v=2' } ],   // from his 2026 Rhino file (assignment 9)
+  models: [ { label: 'Aerion One', src: ASSETS + 'models/aerion-one.glb?v=2&x=tower' } ],   // from his 2026 Rhino file (assignment 9)
 
   /* Part one follows his Adobe Portfolio page (/aerion-one, 2024) in its order.
      Part two is the 2026 redesign: Rhino 8 Assignment 9, from his process book
@@ -601,9 +601,9 @@ const PROJECTS = [
   tools: ['Sketching', 'CAD', 'Prototyping'],
   materials: 'ABS Plastic, Metal Rings',
   cover: IMG('plate/plate-47.jpg'),
-  win:   IMG('plate/plate-47.jpg'), winFit: 'contain', winBg: 'blur',
+  win:   IMG('plate/plate-card.jpg'), winPos: 'center',   // composed for the card from the user-test photos
   hero:  IMG('plate/plate-47.jpg'),
-  models: [ { label: 'Study model', src: ASSETS + 'models/study-plate.glb', study: true } ],       // built from the photo, not his file
+  models: [ { label: 'Study model', src: ASSETS + 'models/study-plate.glb?x=layers', study: true } ],       // built from the photo, not his file
 
   /* text and pictures follow his Adobe Portfolio page (/kids-dining-plate-design), in its order */
   summary: 'A playful, ergonomic dining plate designed to improve the dining experience for toddlers through stability, grip and engagement. I created it as part of my IB Design Technology HL internal assessment.',
@@ -722,7 +722,7 @@ const PROJECTS = [
   cover: IMG('rhino/a5-crown-cover.jpg'),
   win:   IMG('rhino/a5-crown-lamp-render.jpg'), winPos: 'center 45%',
   hero:  IMG('rhino/a5-crown-cover.jpg'),
-  models: [ { label: 'Crown Lamp', src: ASSETS + 'models/crown-lamp.glb?v=7' } ],
+  models: [ { label: 'Crown Lamp', src: ASSETS + 'models/crown-lamp.glb?v=7&x=tiers' } ],
 
   summary: 'A decorative lighting fixture inspired by a royal crown and a chandelier — a circular crown body on a twisted stem, hung with crystal drops and set on a round base.',
   glance: {
@@ -762,8 +762,8 @@ const PROJECTS = [
   cover: IMG('rhino/a6-watch-room-4.jpg'),
   win:   IMG('rhino/a6-watch-room-4.jpg'), winPos: 'center 70%',
   hero:  IMG('rhino/a6-watch-room-4.jpg'),
-  models: [ { label: 'The table', src: ASSETS + 'models/watch-table.glb?v=7' },
-            { label: 'The room',  src: ASSETS + 'models/watch-table-room.glb?v=7' } ],
+  models: [ { label: 'The table', src: ASSETS + 'models/watch-table.glb?v=7&x=layers' },
+            { label: 'The room',  src: ASSETS + 'models/watch-table-room.glb?v=7&x=layers' } ],
   scenes: [
     { k: 'The product', model: 0, yaw: -.55, tilt: .42,
       text: 'A coffee table made to look like a luxury watch — a round dial with hands and subdials, a knurled bezel, a glass crystal, lugs and a bracelet that runs out across the floor.' },
@@ -821,7 +821,7 @@ const PROJECTS = [
   cover: IMG('rhino/a7-printed-open.jpg'),
   win:   IMG('rhino/a7-printed-open.jpg'), winFit: 'contain', winBg: '#ffffff',
   hero:  IMG('rhino/a7-printed-open.jpg'),
-  models: [ { label: 'Ear container', src: ASSETS + 'models/ear-container.glb?v=7' } ],
+  models: [ { label: 'Ear container', src: ASSETS + 'models/ear-container.glb?v=7&x=column' } ],
 
   summary: 'A compact, rounded container whose lid follows the curves of the human ear, closed with a threaded screw — taken from a Rhino model all the way to a printed object in the hand.',
   glance: {
