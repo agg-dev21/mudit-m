@@ -7,8 +7,12 @@ index.html          page shell — you rarely need to touch this
 assets/data.js      ALL the content lives here (text, projects, image paths)
 assets/site.css     the design system
 assets/site.js      behaviour (hero, routing, lightbox, scroll effects)
-assets/*.jpg|png    images
-_archive/           the previous version of the site, kept for reference
+assets/viewer.js    the 3D model viewer on project pages (three.js)
+assets/vase.js      the live Grasshopper vase
+assets/models/      3D models (.glb)
+assets/aerion/, lamp/, plate/, rhino/, sketchbook/   project images
+assets/rhino-files/ downloadable source files (.3dm, .bip, .stl, .gh, PDFs)
+assets/*.jpg|png    other project images
 ```
 
 ## Editing the site
@@ -156,14 +160,16 @@ Any number works — just make all three match and change them together.
 
 ## Viewing it locally
 
-Double-clicking `index.html` works. To check it exactly as it will be hosted,
-run a local server from this folder:
+On Windows, double-click `Start Portfolio Server.bat`. It runs a local
+server and opens `http://localhost:8413`. Anywhere else, run this from the
+folder and open the same address:
 
 ```bash
-py -3 -m http.server 8411
+python -m http.server 8413
 ```
 
-then open `http://localhost:8411`.
+The 3D models need a server: they won't load from a double-clicked
+`index.html`.
 
 ## Publishing
 
