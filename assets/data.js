@@ -720,7 +720,7 @@ const PROJECTS = [
   tools: ['Rhino 8', 'KeyShot'],
   materials: 'Gold metal, bronze, glass crystal',
   cover: IMG('rhino/a5-crown-cover.jpg'),
-  win:   IMG('rhino/a5-crown-cover.jpg'), winFit: 'contain', winBg: 'blur',
+  win:   IMG('rhino/a5-crown-lamp-render.jpg'), winPos: 'center 45%',
   hero:  IMG('rhino/a5-crown-cover.jpg'),
   models: [ { label: 'Crown Lamp', src: ASSETS + 'models/crown-lamp.glb?v=7' } ],
 
@@ -819,7 +819,7 @@ const PROJECTS = [
   tools: ['Rhino 8', '3D Printing', 'Flatbed Printing', 'KeyShot'],
   materials: 'Matte black print, wood-effect flatbed print',
   cover: IMG('rhino/a7-printed-open.jpg'),
-  win:   IMG('rhino/a7-printed-open.jpg'), winFit: 'contain', winBg: 'blur',
+  win:   IMG('rhino/a7-printed-open.jpg'), winFit: 'contain', winBg: '#ffffff',
   hero:  IMG('rhino/a7-printed-open.jpg'),
   models: [ { label: 'Ear container', src: ASSETS + 'models/ear-container.glb?v=7' } ],
 

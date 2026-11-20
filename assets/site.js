@@ -186,13 +186,16 @@ function buildStack() {
     const src = p.win || p.cover;
     const contain = p.winFit === 'contain';
     const bg = contain && p.winBg && p.winBg !== 'blur' ? ` style="background:${p.winBg}"` : '';
+    /* a light backdrop gets dark corner labels so they still read */
+    const hex = /^#([0-9a-f]{6})$/i.exec(p.winBg || '');
+    const light = contain && hex && [0, 2, 4].reduce((t, k) => t + parseInt(hex[1].substr(k, 2), 16), 0) > 600;
     const photo = contain
       ? `${p.winBg === 'blur' ? `<img class="blur" src="${src}" alt="">` : ''}<img class="main" src="${src}" alt="${esc(p.name)}" loading="lazy">`
       : `<img src="${src}" alt="${esc(p.name)}" loading="lazy" style="object-position:${p.winPos || 'center'}">`;
     return `
     <span class="stack-anchor" id="p-${p.slug}"></span>
     <div class="stack-card">
-      <a class="stack-inner" href="#/${p.slug}" data-cursor="view"${bg}>
+      <a class="stack-inner${light ? ' light' : ''}" href="#/${p.slug}" data-cursor="view"${bg}>
         <div class="stack-photo${contain ? ' contain' : ''}">${photo}</div>
         <div class="stack-shade"></div>
         <div class="stack-top"><span>${pad(i + 1)} / ${pad(PROJECTS.length)}</span><span>${p.models ? '<em class="chip-3d">3D</em>' : ''}${esc(p.discipline)} · ${esc(p.year)}</span></div>
