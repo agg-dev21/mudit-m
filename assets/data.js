@@ -21,7 +21,7 @@ const SITE = {
     { project: 'module-for-chair',      img: ASSETS + 'module-for-chair-06-032a4e7791.jpg' },
     { project: 'electric-stove',        img: ASSETS + 'electric-stove-body-handle-s-01-df7c04f617.jpg' },
     { project: 'cochlear-fit-enhancer', img: ASSETS + 'cochlear-implant-fit-enhance-03-de20e24b41.jpg' },
-    { project: 'aerion-one',            img: ASSETS + 'aerion-one-01.jpg' },
+    { project: 'aerion-one',            img: ASSETS + 'aerion/a26-hero.jpg' },
     { project: 'spinner-plate',         img: ASSETS + 'plate/plate-47.jpg' },
     { project: 'electric-stove',        img: ASSETS + 'electric-stove-body-handle-s-01-8c9577cd6f.jpg' },
     { project: 'cochlear-fit-enhancer', img: ASSETS + 'cochlear-implant-fit-enhance-03-b00acc719b.jpg' },
@@ -98,8 +98,10 @@ const SITE = {
                        { src: ASSETS + 'electric-stove-body-handle-s-01-f1b58eaccb.jpg', cap: 'In context on the counter' } ] },
           { project: 'cochlear-fit-enhancer', name: 'Cochlear Implant Fit Enhancer', views: ASSETS + 'rhino4-cochlear.jpg?v=3',
             renders: [ { src: ASSETS + 'cochlear-implant-fit-enhance-03-de20e24b41.jpg', cap: 'Final render' } ] },
-          { project: 'aerion-one', name: 'Aerion One', views: ASSETS + 'rhino4-aerion.jpg?v=3',
-            renders: [ { src: ASSETS + 'aerion-one-01.jpg', cap: 'Final render', tall: true } ] }
+          { project: 'aerion-one', name: 'Aerion One', views: ASSETS + 'aerion/a26-rhino-views.jpg',
+            renders: [ { src: ASSETS + 'aerion/a26-hero.jpg', cap: 'Final render, on the desk', tall: true },
+                       { src: ASSETS + 'aerion/a26-inuse.jpg', cap: 'Door open, tank out' },
+                       { src: ASSETS + 'aerion/a26-fan.jpg', cap: 'Copper-blade fan' } ] }
         ]
       },
       note: 'Surfaces built in Rhino, then materials, light and colourways in KeyShot — the product as it would be made.',
@@ -108,7 +110,7 @@ const SITE = {
         { img: ASSETS + 'electric-stove-body-handle-s-01-28ab8b2915.jpg', cap: 'Electric Stove — Concept 1' },
         { img: ASSETS + 'cochlear-implant-fit-enhance-03-de20e24b41.jpg', cap: 'Cochlear Implant Fit Enhancer — final render' },
         { img: ASSETS + 'electric-stove-body-handle-s-01-402197befe.jpg', cap: 'Electric Stove — Concept 2' },
-        { img: ASSETS + 'aerion-one-01.jpg', cap: 'Aerion One', fit: 'contain' },
+        { img: ASSETS + 'aerion/a26-hero.jpg', cap: 'Aerion One', fit: 'contain' },
         { img: ASSETS + 'cochlear-implant-fit-enhance-03-41b24c8106.jpg', cap: 'Cochlear Implant Fit Enhancer — CAD model' },
         { img: ASSETS + 'electric-stove-body-handle-s-01-8c9577cd6f.jpg', cap: 'Electric Stove — in context' }
       ] },
@@ -452,46 +454,119 @@ const PROJECTS = [
   slug: 'aerion-one',
   name: 'Aerion One',
   nameLine2: 'Air Purifier',
-  subtitle: 'Premium bedside & desk air purifier — cool air and purified air from one compact form.',
+  subtitle: 'A compact desk and bedside air purifier: a 2024 concept, redesigned in 2026 in Rhino and KeyShot.',
   discipline: 'Product Design',
-  year: '2024',
+  year: '2024 – 2026',
   role: 'Industrial Designer',
-  tools: ['CAD', 'Form Development', 'Rendering'],
-  materials: 'Bamboo-finished Polymer, ABS, Translucent Polymer',
-  cover: IMG('aerion-one-01.jpg'),
-  win:   IMG('aerion-one-01.jpg'), winFit: 'contain', winBg: '#676767',
-  hero:  IMG('aerion-one-01.jpg'),
-  models: [ { label: 'Aerion One', src: ASSETS + 'models/aerion-one.glb' } ],
+  tools: ['Sketching', 'SketchUp', 'Rhino 8', 'KeyShot', 'Premiere Pro'],
+  materials: 'Olive metal, copper, smoked acrylic',
+  cover: IMG('aerion/a26-hero.jpg'),
+  win:   IMG('aerion/a26-hero.jpg'), winFit: 'contain', winBg: 'blur',
+  hero:  IMG('aerion/a26-hero.jpg'),
+  models: [ { label: 'Aerion One', src: ASSETS + 'models/aerion-one.glb?v=2' } ],   // from his 2026 Rhino file (assignment 9)
 
-  summary: 'A compact system that blends air cooling and purified airflow in one minimal form, built around directional cooling, clean aesthetics and modular internal parts.',
+  /* Part one follows his Adobe Portfolio page (/aerion-one, 2024) in its order.
+     Part two is the 2026 redesign: Rhino 8 Assignment 9, from his process book
+     and his portfolio spread (the poster). */
+  summary: 'A compact system that blends air cooling and purified airflow in one minimal form. First designed in 2024, then rebuilt in 2026 in Rhino and KeyShot as a three-tier unit that cleans and dries the air of a small room, with the filter and water tanks in easy reach.',
   glance: {
     problem:  'Coolers are bulky, loud and unappealing indoors; air purifiers give clean air but no thermal comfort. Nothing gives both in a size for a bedside or a desk.',
-    approach: 'A vertical appliance in three layers — a filtration base, a cooling cartridge and an airflow head — with a curved top vent that aims the air like a car AC.',
-    outcome:  'A resolved concept with an exploded view of every layer, the airflow system, materials and final renders.'
+    approach: 'A vertical appliance in three layers: an airflow head, a middle module and a filtration base. Sketched and modelled in 2024, then rebuilt part by part in Rhino in 2026.',
+    outcome:  'A Rhino model of every part, KeyShot materials, an exploded-view animation of about 1,000 frames, and a portfolio poster.'
   },
 
   chapters: [
-    { title: 'Why this product',
+    { title: 'About this model (2024)',
+      text: 'AERION ONE is a compact smart cooling system that blends air cooling + purified airflow in one minimal cylindrical form. The design focuses on directional cooling airflow, clean aesthetics, and modular internal components.',
+      media: [ { src: IMG('aerion/a24-01.jpg'), cap: 'Aerion One, 2024' } ] },
+    { title: 'Why this product?',
+      text: 'Traditional coolers are bulky, loud, and visually unappealing indoors. Air purifiers, on the other hand, offer clean air but no thermal comfort. AERION ONE bridges this gap by offering cool air + purified air in a compact form.',
+      media: [ { src: IMG('aerion/a24-02.jpg'), cap: 'Coolers and purifiers on the market' } ] },
+    { title: 'Research & insights',
       text: [
-        'Traditional coolers are bulky, loud and visually unappealing indoors. Air purifiers offer clean air but no thermal comfort. Aerion One bridges the gap: cool air and purified air in one compact form.',
-        'What users need — cool airflow without excess humidity, a compact size for bedrooms, study tables and offices, a direction-controlled outlet like a car AC, and a look that suits a modern interior.'
-      ] },
-    { title: 'Three layers',
-      text: [
-        'The model is divided into three layers, each with a clear job. The top airflow head holds the main motor and directs the airflow. The middle cooling cartridge houses the evaporative or cooling material, with circular holes drawing air in. The bottom filtration base carries a multi-layer HEPA and carbon filter behind large intake channels.'
+        'What users need:',
+        [ 'Cool airflow without excess humidity', 'Compact size for bedrooms, study tables, and offices',
+          'A direction-controlled outlet similar to car AC', 'Aesthetic product suitable for modern interiors' ]
       ],
-      media: [
-        { src: IMG('aerion-one-01.jpg'), cap: 'Aerion One' }
-      ] },
+      media: [ { src: IMG('aerion/a24-03.jpg'), cap: '' } ] },
+    { title: 'Inspiration moodboard',
+      media: [ [ { src: IMG('aerion/a24-04.jpg'), cap: '' }, { src: IMG('aerion/a24-05.jpg'), cap: '' } ],
+        [ { src: IMG('aerion/a24-06.jpg'), cap: '' }, { src: IMG('aerion/a24-07.jpg'), cap: '' }, { src: IMG('aerion/a24-08.jpg'), cap: '' } ],
+        { src: IMG('aerion/a24-09.jpg'), cap: '' } ] },
+    { title: 'Technical insights',
+      text: 'Understanding the cooling + purification process.',
+      media: [ [ { src: IMG('aerion/a24-10.jpg'), cap: '' }, { src: IMG('aerion/a24-11.jpg'), cap: '' } ],
+        { src: IMG('aerion/a24-12.jpg'), cap: '' } ] },
+    { title: 'Ideation',
+      text: 'Initial exploration focused on creating a vertical appliance that feels premium but functional. I experimented with airflow channels, filter placement, and a rotating top vent.',
+      media: [ [ { src: IMG('aerion/a24-14.jpg'), cap: '' }, { src: IMG('aerion/a24-15.jpg'), cap: '' } ] ] },
+    { title: 'Final concept direction',
+      media: [ [ { src: IMG('aerion/a24-16.jpg'), cap: '' }, { src: IMG('aerion/a24-17.jpg'), cap: '' } ],
+        [ { src: IMG('aerion/a24-18.jpg'), cap: '' }, { src: IMG('aerion/a24-19.jpg'), cap: '' } ] ] },
+    { title: 'Exploded view',
+      text: [
+        'The model is divided into three layers, each with a clear function:',
+        'Top airflow head', [ 'Contains the main motor', 'Responsible for directional airflow' ],
+        'Middle cooling cartridge', [ 'Houses water-evaporation or cooling material', 'Circular holes bring air inside' ],
+        'Bottom filtration base', [ 'Multi-layer filter (HEPA + carbon)', 'Large intake channels' ]
+      ],
+      media: [ [ { src: IMG('aerion/a24-20.jpg'), cap: '' }, { src: IMG('aerion/a24-21.jpg'), cap: '' }, { src: IMG('aerion/a24-22.jpg'), cap: '' } ],
+        [ { src: IMG('aerion/a24-23.jpg'), cap: '' }, { src: IMG('aerion/a24-24.jpg'), cap: '' } ],
+        [ { src: IMG('aerion/a24-25.jpg'), cap: '' }, { src: IMG('aerion/a24-26.jpg'), cap: '' }, { src: IMG('aerion/a24-27.jpg'), cap: '' } ] ] },
     { title: 'How it works',
       text: [
-        'Air enters from all sides through vertical channels, is filtered by HEPA and activated carbon, cooled by the middle module, and pushed by the motor through the curved top vent — targeted airflow, like a car AC vent.'
+        'Airflow system:',
+        [ '1. Air enters from all sides through vertical channels', '2. Air gets filtered using HEPA + activated carbon',
+          '3. Air is cooled via the middle module (evaporation/cooling gel)', '4. Motor pushes the cool, clean air through the curved top vent' ],
+        'This replicates the feel of a car AC vent, delivering targeted airflow.'
       ] },
-    { title: 'Materials & finish',
-      text: 'A bamboo-finished polymer body for a warm, sustainable look; translucent blue polymer cooling panels; and a matte-textured ABS top vent.' }
+    { title: 'Materials & finish (2024)',
+      text: [ 'Body: bamboo finished polymer (warm, sustainable look)', 'Cooling panels: translucent blue polymer', 'Top vent: ABS plastic with matte texture' ],
+      media: [ [ { src: IMG('aerion/a24-28.jpg'), cap: 'Bamboo finish' }, { src: IMG('aerion/a24-29.jpg'), cap: 'Matte ABS' }, { src: IMG('aerion/a24-30.jpg'), cap: 'Translucent blue polymer' } ] ] },
+    { title: 'Final renders (2024)',
+      media: [ [ { src: IMG('aerion/a24-31.jpg'), cap: '' }, { src: IMG('aerion/a24-33.jpg'), cap: '' } ],
+        [ { src: IMG('aerion/a24-32.jpg'), cap: '' }, { src: IMG('aerion/a24-34.jpg'), cap: '' } ] ] },
+
+    { title: 'The redesign: modelling in Rhino (2026)',
+      text: [
+        'In 2026 I rebuilt Aerion One in Rhino for my Rhino 8 class. I developed the design by creating individual components and assembling them into a modular product. It has three main sections: the upper air outlet, the central ventilation module, and the lower main body containing the filter compartment.',
+        'I refined the overall shape, added ventilation details, display controls and other functional elements, and checked the model in the Perspective, Front, Right and Top views to review its proportions and overall structure.'
+      ],
+      media: [ { src: IMG('aerion/a26-rhino-views.jpg'), cap: 'Rhino: top, perspective, front and right' },
+        [ { src: IMG('aerion/a26-rhino4.jpg'), cap: 'Form checked in four views' }, { src: IMG('aerion/a26-grill.jpg'), cap: 'Grill study for the air intake' }, { src: IMG('aerion/a26-head.jpg'), cap: 'Rounded head shell around the fan' } ] ],
+      files: [ { label: 'Rhino file', type: '3DM', href: 'assets/rhino-files/09-aerion-one.3dm' } ] },
+    { title: 'Design evolution',
+      text: 'From a Rhino blockout of three tiers as simple volumes, to a first render with a radial intake and a tank window, to the final KeyShot render in olive metal, copper and a smoked door.',
+      media: [ [ { src: IMG('aerion/a26-v1.jpg'), cap: 'V1: Rhino blockout' }, { src: IMG('aerion/a26-first-render.jpg'), cap: 'V2: first render' }, { src: IMG('aerion/a26-final.jpg'), cap: 'Final: KeyShot' } ],
+        { src: IMG('aerion/aerion-one-01.jpg'), cap: 'An earlier KeyShot render' } ] },
+    { title: 'Every part',
+      text: [
+        'The final unit is about 158 mm tall and sits on a desk. Inside, from the top down:',
+        [ 'Fan: polished copper blades, black hub', 'Control head & collar: display + up / down / power', 'Filter: 60-fin pleated round filter',
+          'Filter holder: seal ring + seat', 'Drip tray: copper cooling plate, aluminum heatsink', 'Main PCB: power + fan control',
+          'Tank: twin clear tanks, copper pull tabs', 'Door & hinge: smoked acrylic, outside hinges', 'Base: rubber feet, rocker switch, rear cord' ],
+        'The door swings open and the tank slides out; the copper-blade fan pushes clean, dry air out of the top.'
+      ],
+      media: [ { src: IMG('aerion/a26-exploded.jpg'), cap: 'Every part, top to bottom' },
+        [ { src: IMG('aerion/a26-inuse.jpg'), cap: 'In use: the door swings open, the tank slides out' }, { src: IMG('aerion/a26-fan.jpg'), cap: 'Copper-blade fan' } ] ] },
+    { title: 'KeyShot: materials and animation',
+      text: [
+        'After completing the Rhino model, I imported it into KeyShot to develop the materials, colours and overall appearance of the product, experimenting with different finishes to create a consistent visual identity.',
+        'I then used the KeyShot animation timeline to create an exploded-view animation, showing the individual components separating from the main body. The final animation was about 1,000 frames, took around 12 hours to render, and runs about 2 minutes 20 seconds.'
+      ],
+      media: [ [ { src: IMG('aerion/a26-keyshot-materials.jpg'), cap: 'Materials in KeyShot' }, { src: IMG('aerion/a26-keyshot-timeline.jpg'), cap: 'The animation timeline' } ],
+        { src: IMG('aerion/a26-frames.jpg'), cap: 'The rendered frames' } ],
+      files: [ { label: 'KeyShot package', type: 'BIP', href: 'assets/rhino-files/09-aerion-one.bip' } ] },
+    { title: 'Video editing',
+      text: 'I edited the rendered animation in Adobe Premiere Pro: background music from Pixabay, labels that identify and explain each component of the purifier, and small edits to improve the flow of the presentation.',
+      media: [ [ { src: IMG('aerion/a26-premiere.jpg'), cap: 'Editing in Premiere Pro' }, { src: IMG('aerion/a26-premiere-timeline.jpg'), cap: 'The final sequence' } ] ] },
+    { title: 'The poster',
+      text: 'The project on one portfolio spread: the product on the desk, concept development, design evolution, every part, and the purifier in use.',
+      media: [ { src: IMG('aerion/a26-poster.jpg'), cap: 'Portfolio spread' } ],
+      files: [ { label: 'Portfolio spread', type: 'PDF', href: 'assets/rhino-files/09-aerion-one-poster.pdf' } ] }
   ],
 
-  reflection: 'Combining cooling and purification in one compact system showed me how modular layering improves function — and how small details like the vent angle and the intake size change the airflow. It pushed my CAD, detailing and presentation.'
+  reflection: 'This project helped me explore how cooling and purification can combine into one compact system. I learned how modular layering improves function, and how small design details like vent angle and intake size dramatically affect airflow performance. This workflow improved my CAD skills, detailing, and final product presentation.'
 },
 
 /* ===================== 06 — KID'S DINING PLATE DESIGN ==================== */
