@@ -248,7 +248,16 @@ const PROJECTS = [
     { title: 'Handle development',
       text: 'Four grip systems were developed to investigate finger clearance, contact points, comfort, and integration with the stove body.',
       media: [
-        { src: IMG('electric-stove-body-handle-s-01-df7c04f617.jpg'), cap: 'Grip and clearance study' }
+        { src: IMG('electric-stove-body-handle-s-01-df7c04f617.jpg'), cap: 'Handles design for infrared electric stove' },
+        [ { src: IMG('stove/handle-10.jpg'), cap: 'Handle 1' }, { src: IMG('stove/handle-11.jpg'), cap: '' } ],
+        [ { src: IMG('stove/handle-12.jpg'), cap: '' }, { src: IMG('stove/handle-13.jpg'), cap: '' } ],
+        [ { src: IMG('stove/handle-14.jpg'), cap: 'Handle 2' }, { src: IMG('stove/handle-15.jpg'), cap: '' } ],
+        [ { src: IMG('stove/handle-16.jpg'), cap: '' }, { src: IMG('stove/handle-17.jpg'), cap: '' } ],
+        [ { src: IMG('stove/handle-18.jpg'), cap: 'Handle 3' }, { src: IMG('stove/handle-19.jpg'), cap: '' } ],
+        [ { src: IMG('stove/handle-20.jpg'), cap: '' }, { src: IMG('stove/handle-21.jpg'), cap: '' } ],
+        [ { src: IMG('stove/handle-22.jpg'), cap: 'Handle 4' }, { src: IMG('stove/handle-23.jpg'), cap: '' } ],
+        [ { src: IMG('stove/handle-24.jpg'), cap: '' }, { src: IMG('stove/handle-25.jpg'), cap: '' } ],
+        [ { src: IMG('stove/handle-26.jpg'), cap: 'Tapered split for finger clearance' }, { src: IMG('stove/handle-27.jpg'), cap: 'Individual finger domes for a secure four-point grip' } ]
       ] }
   ],
 
@@ -307,6 +316,7 @@ const PROJECTS = [
         [ { src: IMG('cochlear-implant-fit-enhance-03-7d2d07427a.jpg'), cap: '' },
           { src: IMG('cochlear-implant-fit-enhance-03-41b24c8106.jpg'), cap: 'CAD model' } ],
         { src: IMG('cochlear-implant-fit-enhance-03-908039b32e.jpg'), cap: 'Views of the clip' },
+        { src: IMG('cochlear-drawing.jpg'), cap: 'Technical drawing' },
         { src: IMG('cochlear-implant-fit-enhance-03-8f5a774a74.jpg'), cap: 'Exploded view' },
         [ { src: IMG('cochlear-implant-fit-enhance-03-ac63746166.jpg'), cap: 'Outer case' },
           { src: IMG('cochlear-implant-fit-enhance-03-cbec3d154a.jpg'), cap: 'Top & bottom guide' } ],
@@ -369,6 +379,7 @@ const PROJECTS = [
     { title: 'The idea',
       text: 'I wanted to make a modular chair — changing the headrest when you are bored or feel uncomfortable, and removing your back support with some simple mechanism like release and locking.',
       media: [
+        { src: IMG('chair/chair-01.jpg'), cap: 'The module and its housing' },
         { src: IMG('module-for-chair-06-d12044c064.jpg'), cap: 'How it locks, step by step' }
       ] },
 
@@ -380,8 +391,12 @@ const PROJECTS = [
       ] },
 
     { title: 'Two mechanisms explored',
-      text: 'Two types of mechanism were sketched and modelled before choosing a direction.',
+      text: [
+        '1st mechanism: the button inside locks the module in place, and pushing it from outside frees the extended part so the module slides out.',
+        '2nd mechanism: this mechanism locks itself with the module when slid in. It locks itself in the groove and is released when pushed.'
+      ],
       media: [
+        [ { src: IMG('chair/chair-06.jpg'), cap: 'The 1st mechanism, step by step' }, { src: IMG('chair/chair-08.jpg'), cap: 'Removable module' } ],
         [ { src: IMG('module-for-chair-06-085953f6ef.jpg'), cap: '' },
           { src: IMG('module-for-chair-06-575648948d.jpg'), cap: 'Sketches' } ],
         [ { src: IMG('module-for-chair-06-6d9e3ed630.jpg'), cap: '' },
@@ -394,10 +409,13 @@ const PROJECTS = [
       text: 'Push the button and slide the headrest off the chair; line the next one up with the mechanism and slide it on until it locks.',
       media: [
         { src: IMG('module-for-chair-06-75963e567c.jpg'), cap: 'Storyboard — releasing, swapping and locking a headrest module' }
-      ] }
+      ] },
+
+    { title: '3D print model of the 1st and 2nd mechanism',
+      media: [ { src: IMG('chair/chair-15.jpg'), cap: 'Printed mechanisms' } ] }
   ],
 
-  reflection: 'Designing a chair is not only about how it looks — it is proportion, weight distribution and comfort, and a small change in an angle or a dimension changes the whole experience. Moving from sketches to models and material tests taught me how to take an abstract idea to something that works.'
+  reflection: 'This module helped me understand that designing a chair is not only about aesthetics, it is about proportions, weight distribution, and human comfort. I learned how small adjustments in angles or dimensions can completely change user experience. Working through sketching, model making, and material testing strengthened my ability to move from an abstract idea to a functional design. This project improved my visual communication, decision-making, and confidence in presenting my design process.'
 },
 
 /* ========================== 04 — WASHER LAMP ============================ */
