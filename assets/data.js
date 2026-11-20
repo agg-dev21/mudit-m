@@ -17,12 +17,12 @@ const SITE = {
   carousel: [
     { project: 'electric-stove',        img: ASSETS + 'electric-stove-body-handle-s-01-28ab8b2915.jpg' },
     { project: 'cochlear-fit-enhancer', img: ASSETS + 'cochlear-implant-fit-enhance-03-6847091a4a.jpg' },
-    { project: 'washer-lamp',           img: ASSETS + 'washer-lamp-01.jpg' },
+    { project: 'washer-lamp',           img: ASSETS + 'lamp/lamp-02.jpg' },
     { project: 'module-for-chair',      img: ASSETS + 'module-for-chair-06-032a4e7791.jpg' },
     { project: 'electric-stove',        img: ASSETS + 'electric-stove-body-handle-s-01-df7c04f617.jpg' },
     { project: 'cochlear-fit-enhancer', img: ASSETS + 'cochlear-implant-fit-enhance-03-de20e24b41.jpg' },
     { project: 'aerion-one',            img: ASSETS + 'aerion-one-01.jpg' },
-    { project: 'spinner-plate',         img: ASSETS + 'spinner-plate-05-8a6493e0f3.jpg' },
+    { project: 'spinner-plate',         img: ASSETS + 'plate/plate-47.jpg' },
     { project: 'electric-stove',        img: ASSETS + 'electric-stove-body-handle-s-01-8c9577cd6f.jpg' },
     { project: 'cochlear-fit-enhancer', img: ASSETS + 'cochlear-implant-fit-enhance-03-b00acc719b.jpg' },
     { project: 'crown-lamp',            img: ASSETS + 'rhino/a5-crown-lamp-render.jpg' },
@@ -53,7 +53,7 @@ const SITE = {
         text: 'Then Rhino. The ear container’s body, lid, spiral and thread, each modelled as its own part.' },
       { verb: 'Render', img: ASSETS + 'rhino/a5-crown-lamp-render.jpg', href: '#/crown-lamp', go: 'Crown Lamp',
         text: 'KeyShot for material and light: gold, bronze and glass on the crown lamp.' },
-      { verb: 'Make',   img: ASSETS + 'washer-lamp-01.jpg', href: '#/washer-lamp', go: 'Washer Lamp',
+      { verb: 'Make',   img: ASSETS + 'lamp/lamp-02.jpg', href: '#/washer-lamp', go: 'Washer Lamp',
         text: 'Then by hand. The washer lamp was built from steel washers and wire.' }
     ],
     timeline: [
@@ -409,31 +409,42 @@ const PROJECTS = [
   timeline: '1 Week',
   tools: ['Sketching', 'Prototyping', 'Fabrication'],
   materials: 'Steel Washers, Wire, LED Bulb',
-  cover: IMG('washer-lamp-01.jpg'),
-  win:   IMG('washer-lamp-01.jpg'), winFit: 'contain', winBg: 'blur',
-  hero:  IMG('washer-lamp-01.jpg'),
+  cover: IMG('lamp/lamp-02.jpg'),
+  win:   IMG('lamp/lamp-01.jpg'),
+  hero:  IMG('lamp/lamp-01.jpg'),
   models: [ { label: 'Study model', src: ASSETS + 'models/study-lamp.glb', study: true } ],        // built from the photo, not his file
 
-  summary: 'A hanging lamp built entirely from steel washers and wire — exploring how a single mass-produced component can create texture, form, and light patterns.',
+  /* text and pictures follow his Adobe Portfolio page (/lamp), in its order */
+  summary: 'Exploring how a single mass-produced component can create texture, form, and light patterns.',
   glance: {
-    problem:  'Can a single, ordinary bought-in part become a finished object on its own — without moulding or custom pieces?',
-    approach: 'Steel washers wired into a hanging lattice around an LED bulb, built by hand over one week.',
-    outcome:  'A working pendant lamp whose gaps throw a pattern of light across the room.'
+    problem:  'Can one mass-produced component, a plain steel washer, create texture, form and light patterns on its own?',
+    approach: 'Sketches of repeated washers as structure, then the shade built by hand on wire ring frames, washer by washer.',
+    outcome:  'A hanging lamp of steel washers and wire around an LED bulb, made in one week.'
   },
 
   chapters: [
-    { title: 'The brief',
-      text: 'Take a single mass-produced part and build a resolved object from repetition alone.' },
-    { title: 'The making',
-      text: 'Washers were linked with wire into a hanging lattice that forms the shade, with loose washers hanging free below it.',
+    { title: 'The lamp',
+      text: 'Exploring how a single mass-produced component can create texture, form, and light patterns.',
       media: [
-        { src: IMG('washer-lamp-01.jpg'), cap: 'The finished lamp, lit' }
+        [ { src: IMG('lamp/lamp-01.jpg'), cap: '' }, { src: IMG('lamp/lamp-03.jpg'), cap: '' } ],
+        [ { src: IMG('lamp/lamp-02.jpg'), cap: '' }, { src: IMG('lamp/lamp-04.jpg'), cap: '' } ]
       ] },
-    { title: 'The light',
-      text: 'Lit from inside, light escapes through the gaps between the washers, turning the shade into a pattern on the surfaces around it.' }
-  ],
-
-  reflection: 'This project reinforced that great product design is never only about how something looks — it is about proportion, weight, material and human comfort working together until the object simply feels right.'
+    { title: 'Ideation',
+      text: 'Exploring how repeated washers could create structure, transparency, and decorative light effects.',
+      media: [
+        [ { src: IMG('lamp/lamp-05.jpg'), cap: '' }, { src: IMG('lamp/lamp-06.jpg'), cap: '' } ],
+        [ { src: IMG('lamp/lamp-07.jpg'), cap: '' }, { src: IMG('lamp/lamp-08.jpg'), cap: '' } ]
+      ] },
+    { title: 'Process',
+      text: 'Built by hand in a week: washers, wire and pliers on the bench, the ring frames first, then the washers wired on until the shade took shape.',
+      media: [
+        [ { src: IMG('lamp/lamp-09.jpg'), cap: '' }, { src: IMG('lamp/lamp-10.jpg'), cap: '' } ],
+        [ { src: IMG('lamp/lamp-11.jpg'), cap: '' }, { src: IMG('lamp/lamp-12.jpg'), cap: '' } ],
+        [ { src: IMG('lamp/lamp-13.jpg'), cap: '' }, { src: IMG('lamp/lamp-14.jpg'), cap: '' } ],
+        [ { src: IMG('lamp/lamp-15.jpg'), cap: '' }, { src: IMG('lamp/lamp-16.jpg'), cap: '' } ],
+        { src: IMG('lamp/lamp-17.jpg'), cap: '' }
+      ] }
+  ]
 },
 
 /* ========================== 05 — AERION ONE ============================= */
@@ -494,39 +505,112 @@ const PROJECTS = [
   role: 'Industrial Designer',
   tools: ['Sketching', 'CAD', 'Prototyping'],
   materials: 'ABS Plastic, Metal Rings',
-  cover: IMG('spinner-plate-05-8a6493e0f3.jpg'),
-  win:   IMG('spinner-plate-05-8a6493e0f3.jpg'), winFit: 'contain', winBg: 'blur',
-  hero:  IMG('spinner-plate-05-8a6493e0f3.jpg'),
+  cover: IMG('plate/plate-47.jpg'),
+  win:   IMG('plate/plate-47.jpg'), winFit: 'contain', winBg: 'blur',
+  hero:  IMG('plate/plate-47.jpg'),
   models: [ { label: 'Study model', src: ASSETS + 'models/study-plate.glb', study: true } ],       // built from the photo, not his file
 
-  summary: 'A playful, ergonomic dining plate that makes mealtimes easier, safer and more fun for toddlers — through stability, grip and engagement. Made for my IB Design Technology HL internal assessment.',
+  /* text and pictures follow his Adobe Portfolio page (/kids-dining-plate-design), in its order */
+  summary: 'A playful, ergonomic dining plate designed to improve the dining experience for toddlers through stability, grip and engagement. I created it as part of my IB Design Technology HL internal assessment.',
   glance: {
-    problem:  'In a school, children struggled with spills, unstable plates, poor grip and low engagement at mealtimes — and teachers and caregivers confirmed it.',
-    approach: 'Research, a caregiver survey and hand measurements set the requirements. Six early concepts narrowed to four prototypes, tested with users.',
-    outcome:  'The Spinner Plate with Roller — a child-safe plate that improves stability, encourages motor-skill development and adds playful interaction.'
+    problem:  'In a school, many children struggled with spills, unstable plates, poor grip and low engagement at mealtimes.',
+    approach: 'Observation, interviews, a caregiver survey and hand measurements set the requirements. Six early concepts led to four prototypes tested with users.',
+    outcome:  'The Spinner Plate with Roller: a child-safe dining plate that improves stability, encourages motor-skill development and adds playful interaction.'
   },
 
   chapters: [
-    { title: 'Understanding the problem',
+    { title: 'Project overview',
       text: [
-        'During research in a school, I saw children struggle with plates that slide and spill, are too heavy or slippery, trap food in their corners, are hard to clean, and give them nothing to engage with.',
-        'Teachers and caregivers asked for the same things: lightweight plates, non-slip bases, better grip for small hands, divided sections, easy cleaning, safe materials — and an element of fun to keep children focused.'
-      ] },
+        'This project explores how thoughtful product design can improve mealtimes for young children. During my research in a school environment, I observed that many children struggle with spills, unstable plates, poor grip, and low engagement.',
+        'My goal was to redesign a dining plate that makes eating easier, safer, and more enjoyable.',
+        'The outcome is the Spinner Plate with Roller, a child-safe dining plate that improves stability, encourages motor-skill development, and adds playful interaction.'
+      ],
+      media: [ { src: IMG('plate/plate-01.jpg'), cap: '' } ] },
+    { title: 'Understanding the problems',
+      text: [
+        'Young children face several dining challenges:',
+        [ 'Unstable plates cause spills', 'Plates are too heavy or slippery', 'Poor finger grip', 'Food gets trapped in corners',
+          'Low engagement during mealtime', 'Hard to clean surfaces', 'Uncomfortable posture due to bad plate design' ],
+        'Interviews with teachers and caregivers reinforced these issues and highlighted the need for:',
+        [ 'Lightweight plates', 'Non-slip bases', 'Better grip for small hands', 'Divided sections', 'Easy cleaning',
+          'Safe, durable materials', 'An element of fun to keep kids focused' ]
+      ],
+      media: [ [ { src: IMG('plate/plate-02.jpg'), cap: '' }, { src: IMG('plate/plate-03.jpg'), cap: '' } ], [ { src: IMG('plate/plate-04.jpg'), cap: '' }, { src: IMG('plate/plate-05.jpg'), cap: '' } ], { src: IMG('plate/plate-06.jpg'), cap: '' } ] },
     { title: 'Research & insights',
       text: [
-        'Comparing common children’s plates showed most slide easily, don’t support small hands, and trap food at the edges.',
-        'A survey of caregivers and hostel staff put ease of cleaning first (40%), then stability and spill prevention (30%), engaging design (20%) and divided compartments (10%). Children’s hand measurements set the plate width, grip points and edge radii.'
+        'I analyzed commonly used children’s plates to understand their strengths and weaknesses.',
+        'Key observations:',
+        [ 'Many plates lack stability and slide easily', 'Most designs don’t support grip for small hands',
+          'Plates trap food because of poor edge geometry', 'Some designs are too plain and don’t engage children' ]
+      ],
+      media: [ [ { src: IMG('plate/plate-07.jpg'), cap: '' }, { src: IMG('plate/plate-08.jpg'), cap: '' } ] ] },
+    { title: 'Parent & caregiver feedback',
+      text: [
+        'A quick survey with caregivers and hostel staff revealed important preferences:',
+        [ '40% focused on ease of cleaning', '30% highlighted plate stability and spill prevention',
+          '20% wanted engaging designs for kids', '10% emphasized divided compartments' ],
+        'The survey confirmed the need for a safe, stable, and child-friendly eating plate.'
+      ],
+      media: [ { src: IMG('plate/plate-09.jpg'), cap: 'What caregivers and hostel staff asked for first' } ] },
+    { title: 'User hand measurements',
+      text: [
+        'To understand how children grip plates and how big handles should be, I referred to general anthropometric data available online. These measurements helped guide plate width, grip points, and ergonomics for young users.',
+        'Key takeaways:',
+        [ 'Children have smaller grip spans', 'Edges must be rounded and comfortable', 'Width must support two-hand holding',
+          'The plate should be lightweight and balanced' ]
+      ],
+      media: [ { src: IMG('plate/plate-10.jpg'), cap: 'Hand measurements from general anthropometric data' } ] },
+    { title: 'Design requirements',
+      text: [
+        'Based on the research, these became the core requirements:',
+        'Safety', [ 'Rounded edges', 'Non-toxic, food-safe materials', 'Durable structure' ],
+        'User experience', [ 'Child-friendly form and size', 'Playful but not distracting', 'Comfortable handling', 'Encourages independent eating' ],
+        'Functional', [ 'Stable and non-slip', 'Divided compartments', 'Easy to grip & clean', 'Spill-resistant edges', 'Lightweight' ],
+        'Environmental', [ 'Recyclable materials', 'Long lifespan', 'Low material waste', 'Encourages reuse' ]
       ] },
-    { title: 'Concepts',
-      text: 'Six early concepts explored balance, stability, form and interaction. Four were prototyped and tested with users — the Spinner Plate with Roller, a truck-theme plate, a 360 balancer plate and a LEGO-style plate.' },
-    { title: 'The final product',
-      text: 'The Spinner Plate with Roller: an ABS frame — lightweight, impact-resistant, easy to clean and suited to injection moulding — with metal rings for a smooth, long-lasting roller motion.',
-      media: [
-        { src: IMG('spinner-plate-05-8a6493e0f3.jpg'), cap: 'The user-test edition in use' }
-      ] }
+    { title: 'Ideation',
+      text: 'I explored six early concepts focusing on balance, stability, form, and interaction.',
+      media: [ { src: IMG('plate/plate-11.jpg'), cap: '' },
+        { src: IMG('plate/plate-12.jpg'), cap: '' },
+        { src: IMG('plate/plate-13.jpg'), cap: '' },
+        { src: IMG('plate/plate-14.jpg'), cap: '' },
+        { src: IMG('plate/plate-15.jpg'), cap: '' },
+        { src: IMG('plate/plate-16.jpg'), cap: '' } ] },
+    { title: 'CAD model + final ideation',
+      media: [ [ { src: IMG('plate/plate-17.jpg'), cap: '' }, { src: IMG('plate/plate-18.jpg'), cap: '' } ],
+        [ { src: IMG('plate/plate-19.jpg'), cap: '' }, { src: IMG('plate/plate-20.jpg'), cap: '' } ] ] },
+    { title: 'Concept development',
+      text: 'Four concepts were prototyped and tested with users.',
+      media: [ [ { src: IMG('plate/plate-21.jpg'), cap: 'Spinner Plate with Roller' }, { src: IMG('plate/plate-22.jpg'), cap: 'Truck theme Plate' } ],
+        [ { src: IMG('plate/plate-23.jpg'), cap: '360 Balancer Plate' }, { src: IMG('plate/plate-24.jpg'), cap: 'LEGO style Plate' } ] ] },
+    { title: 'Research and development',
+      text: 'The four prototypes scored against user feedback, aesthetics, materials, function, cost, performance, manufacturing, environment, target market and safety. The Spinner Plate with Roller scored highest, 44 out of 50.',
+      media: [ { src: IMG('plate/plate-25.jpg'), cap: 'Scoring the four concepts' } ] },
+    { title: 'Material selection',
+      text: [
+        'ABS plastic (frame)', [ 'Lightweight', 'Impact-resistant', 'Easy to clean', 'Suitable for injection molding' ],
+        'Metal rings', [ 'Provides smooth roller motion', 'Improves longevity' ]
+      ],
+      media: [ [ { src: IMG('plate/plate-26.jpg'), cap: 'Acrylic and ABS plastic' }, { src: IMG('plate/plate-27.jpg'), cap: 'Plastic rings and metal rings' } ] ] },
+    { title: 'CAD model',
+      media: [ { src: IMG('plate/plate-28.jpg'), cap: '' },
+        [ { src: IMG('plate/plate-29.jpg'), cap: 'Top' }, { src: IMG('plate/plate-30.jpg'), cap: 'Base' } ],
+        { src: IMG('plate/plate-31.jpg'), cap: '' } ] },
+    { title: 'Assembly drawing & exploded view',
+      media: [ [ { src: IMG('plate/plate-32.jpg'), cap: 'Exploded view' }, { src: IMG('plate/plate-33.jpg'), cap: 'The parts' } ] ] },
+    { title: 'Additional technical drawing',
+      media: [ [ { src: IMG('plate/plate-34.jpg'), cap: '' }, { src: IMG('plate/plate-35.jpg'), cap: '' } ],
+        [ { src: IMG('plate/plate-36.jpg'), cap: '' }, { src: IMG('plate/plate-37.jpg'), cap: '' } ],
+        [ { src: IMG('plate/plate-38.jpg'), cap: '' }, { src: IMG('plate/plate-39.jpg'), cap: '' } ] ] },
+    { title: 'Final product (user test edition)',
+      media: [ [ { src: IMG('plate/plate-43.jpg'), cap: '' }, { src: IMG('plate/plate-47.jpg'), cap: '' } ],
+        [ { src: IMG('plate/plate-48.jpg'), cap: '' }, { src: IMG('plate/plate-46.jpg'), cap: '' } ],
+        [ { src: IMG('plate/plate-40.jpg'), cap: '' }, { src: IMG('plate/plate-41.jpg'), cap: '' } ],
+        [ { src: IMG('plate/plate-42.jpg'), cap: '' }, { src: IMG('plate/plate-44.jpg'), cap: '' } ],
+        [ { src: IMG('plate/plate-45.jpg'), cap: '' }, { src: IMG('plate/plate-49.jpg'), cap: '' } ] ] }
   ],
 
-  reflection: 'This project deepened my understanding of human-centred design, ergonomics, child safety and material choice — and of prototyping and testing with real users to balance function with play. Next I would try softer materials, refine the roller and test new colour themes for different ages.'
+  reflection: 'This project strengthened my understanding of human-centered design, ergonomics, child safety, and material selection. I learned the value of prototyping, user testing, iteration, and balancing function with playfulness. Future improvements could include using softer materials for better sensory experience, refining the roller mechanism, and testing new color themes for different age groups.'
 },
 
 /* ============================ 07 — CROWN LAMP =========================== */

@@ -1237,3 +1237,13 @@ html.has-cur,html.has-cur *{cursor:none!important}
   .sk-shows{grid-column:1}
   .sk-feature .tool-sketch,.sk-feature .span-3,.sk-feature .span-5,.sk-feature .span-6,.sk-feature .span-7{grid-column:span 12}
 }
+
+/* bullet lists inside a chapter's text */
+.ch-list{list-style:none;margin:-.2em 0 1.1em;padding:0}
+.ch-list li{position:relative;padding-left:1.1em;margin:.28em 0}
+.ch-list li::before{content:"";position:absolute;left:0;top:.68em;width:.42em;height:1px;background:var(--signal)}
+/* three or more pictures in a row sit three across on a wide screen */
+@media (min-width:901px){ .m-row:has(> .m:nth-child(3)){grid-template-columns:repeat(3,minmax(0,1fr))} }
+.ch-list{font-size:clamp(16px,1.15vw,18px);line-height:1.55;color:var(--ink-2)}
+.ch-body p + .ch-list{margin-top:.5em}
+.ch-body .ch-list + p{margin-top:1.1em}

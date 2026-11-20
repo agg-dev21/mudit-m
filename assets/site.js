@@ -466,7 +466,8 @@ function fig(m) {
 }
 const mediaHTML = list => (list || []).map(m =>
   Array.isArray(m) ? `<div class="m-row">${m.map(fig).join('')}</div>` : fig(m)).join('');
-const paras = t => (Array.isArray(t) ? t : [t]).filter(Boolean).map(x => `<p>${esc(x)}</p>`).join('');
+const paras = t => (Array.isArray(t) ? t : [t]).filter(Boolean).map(x =>
+  Array.isArray(x) ? `<ul class="ch-list">${x.map(i => `<li>${esc(i)}</li>`).join('')}</ul>` : `<p>${esc(x)}</p>`).join('');
 
 const glanceOf = p => {
   const g = p.glance || {};
