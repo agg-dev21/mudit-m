@@ -392,7 +392,7 @@ function buildMenu() {
 function buildAbout() {
   const A = SITE.about;
   $('#about-where').textContent = `${SITE.school} — ${SITE.location}`;
-  $('#about-say').textContent = A.statement;
+  $('#about-say').innerHTML = esc(A.statement).replace(/→/g, '<span class="say-arrow" aria-hidden="true">→</span>');
 
   /* the four steps: hover or focus one to open it; the first starts open */
   const steps = $('#steps');

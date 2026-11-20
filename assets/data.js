@@ -43,8 +43,8 @@ const SITE = {
      taken from the resume. The title block uses school, location, status,
      degree and resume from the fields above. */
   about: {
-    statement: 'Designing with curiosity',
-    degree: 'BA Industrial Design, expected 2029',
+    statement: 'Draw → Model → Render → Make',
+    degree: 'BFA Industrial Design, expected 2029',
     steps: [
       /* four different products, one for each step */
       { verb: 'Draw',   img: ASSETS + 'electric-stove-body-handle-s-01-3db8b79518.jpg', href: '#/electric-stove', go: 'Electric Stove',
@@ -61,9 +61,10 @@ const SITE = {
       { y: '2023', t: 'Future Careers in Game Design workshop, École Intuit Lab, New Delhi' },
       { y: '2024', t: 'Atlas Summer Program: drawing, sketching and photography, Atlas SkillTech University, Mumbai' },
       { y: '2024', t: 'Creative Intelligence Award, Design & Technology' },
-      { y: '2025', t: 'Dean’s List, SCAD, fall quarter' },
+      { y: '2025–26', t: 'Dean’s List, SCAD, Fall 2025 – Spring 2026' },
+      { y: '2026', t: '3rd place and a $2,000 honorary scholarship, SCADstartUp: Cogniva, a team-built companion robot that reduces social isolation in senior living communities' },
       { y: 'Now',  t: 'Open to internships', now: true },
-      { y: '2029', t: 'BA Industrial Design, SCAD (expected)', future: true }
+      { y: '2029', t: 'BFA Industrial Design, SCAD (expected)', future: true }
     ]
   },
 
