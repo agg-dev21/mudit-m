@@ -670,7 +670,7 @@ function chapterHTML(c, n, total, track) {
 
 /* ---------------------------------------------------------------- viewer -- */
 /* three.js loads the first time a model is shown */
-const VIEWER_JS = './viewer.js?v=14';
+const VIEWER_JS = './viewer.js?v=15';
 const holoNote = () => `<p class="holo-note">${location.protocol === 'file:'
   ? 'The 3D view can’t run from a file opened directly. Open the site through a local server or its web address.'
   : 'The 3D view could not load. Check the connection and try again.'}</p>`;

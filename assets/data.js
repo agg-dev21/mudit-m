@@ -17,15 +17,15 @@ const SITE = {
   carousel: [
     { project: 'electric-stove',        img: ASSETS + 'electric-stove-body-handle-s-01-28ab8b2915.jpg' },
     { project: 'cochlear-fit-enhancer', img: ASSETS + 'cochlear-implant-fit-enhance-03-6847091a4a.jpg' },
-    { project: 'washer-lamp',           img: ASSETS + 'lamp/lamp-02.jpg' },
-    { project: 'module-for-chair',      img: ASSETS + 'module-for-chair-06-032a4e7791.jpg' },
+    { project: 'washer-lamp',           img: ASSETS + 'lamp/lamp-cover.jpg' },
+    { project: 'module-for-chair',      img: ASSETS + 'chair/chair-cover.jpg' },
     { project: 'electric-stove',        img: ASSETS + 'electric-stove-body-handle-s-01-df7c04f617.jpg' },
     { project: 'cochlear-fit-enhancer', img: ASSETS + 'cochlear-implant-fit-enhance-03-de20e24b41.jpg' },
-    { project: 'aerion-one',            img: ASSETS + 'aerion/a26-hero.jpg' },
+    { project: 'aerion-one',            img: ASSETS + 'aerion/a26-cover.jpg' },
     { project: 'spinner-plate',         img: ASSETS + 'plate/plate-47.jpg' },
     { project: 'electric-stove',        img: ASSETS + 'electric-stove-body-handle-s-01-8c9577cd6f.jpg' },
     { project: 'cochlear-fit-enhancer', img: ASSETS + 'cochlear-implant-fit-enhance-03-b00acc719b.jpg' },
-    { project: 'crown-lamp',            img: ASSETS + 'rhino/a5-crown-lamp-render.jpg' },
+    { project: 'crown-lamp',            img: ASSETS + 'rhino/a5-crown-cover.jpg' },
     { project: 'watch-table',           img: ASSETS + 'rhino/a6-watch-room-4.jpg' },
     { project: 'ear-container',         img: ASSETS + 'rhino/a7-printed-open.jpg' }
   ],
@@ -187,8 +187,8 @@ const PROJECTS = [
   year: '2026',
   role: 'Industrial Designer',
   tools: ['Sketching', 'CAD', 'Form Development'],
-  cover: IMG('electric-stove-body-handle-s-01-402197befe.jpg'),
-  win:   IMG('electric-stove-body-handle-s-01-402197befe.jpg'), winPos: 'center 60%',
+  cover: IMG('stove/stove-cover.jpg'),
+  win:   IMG('stove/stove-cover.jpg'), winPos: 'center 55%',
   hero:  IMG('electric-stove-body-handle-s-01-8c9577cd6f.jpg'),
   models: [ { label: 'Concept 1', src: ASSETS + 'models/stove-concept-1.glb?v=2' },
             { label: 'Concept 2', src: ASSETS + 'models/stove-concept-2.glb?v=2' } ],   // real Rhino models
@@ -364,9 +364,9 @@ const PROJECTS = [
   year: '2024',
   role: 'Industrial Designer',
   tools: ['Mechanism Design', 'CAD', '3D Printing'],
-  cover: IMG('module-for-chair-06-032a4e7791.jpg'),
-  win:   IMG('module-for-chair-06-032a4e7791.jpg'), winFit: 'contain', winBg: '#ffffff',
-  hero:  IMG('module-for-chair-06-032a4e7791.jpg'),
+  cover: IMG('chair/chair-cover.jpg'),
+  win:   IMG('chair/chair-cover.jpg'),
+  hero:  IMG('chair/chair-cover.jpg'),
   models: [ { label: 'Study model', src: ASSETS + 'models/study-headrest.glb?v=4', study: true } ],   // built from the CAD sheets, not his file
 
   summary: 'A concept for the internal workings of a headrest: a release-and-locking mechanism that lets you swap the headrest when it no longer suits you, or take the back support off, by hand.',
@@ -432,8 +432,8 @@ const PROJECTS = [
   tools: ['Sketching', 'Prototyping', 'Fabrication'],
   materials: 'Steel Washers, Wire, LED Bulb',
   cover: IMG('lamp/lamp-02.jpg'),
-  win:   IMG('lamp/lamp-01.jpg'),
-  hero:  IMG('lamp/lamp-01.jpg'),
+  win:   IMG('lamp/lamp-cover.jpg'),
+  hero:  IMG('lamp/lamp-cover.jpg'),
   models: [ { label: 'Study model', src: ASSETS + 'models/study-lamp.glb', study: true } ],        // built from the photo, not his file
 
   /* text and pictures follow his Adobe Portfolio page (/lamp), in its order */
@@ -480,9 +480,9 @@ const PROJECTS = [
   role: 'Industrial Designer',
   tools: ['Sketching', 'SketchUp', 'Rhino 8', 'KeyShot', 'Premiere Pro'],
   materials: 'Olive metal, copper, smoked acrylic',
-  cover: IMG('aerion/a26-hero.jpg'),
-  win:   IMG('aerion/a26-hero.jpg'), winFit: 'contain', winBg: 'blur',
-  hero:  IMG('aerion/a26-hero.jpg'),
+  cover: IMG('aerion/a26-cover.jpg'),
+  win:   IMG('aerion/a26-cover.jpg'), winFit: 'contain', winBg: 'blur',
+  hero:  IMG('aerion/a26-cover.jpg'),
   models: [ { label: 'Aerion One', src: ASSETS + 'models/aerion-one.glb?v=2' } ],   // from his 2026 Rhino file (assignment 9)
 
   /* Part one follows his Adobe Portfolio page (/aerion-one, 2024) in its order.
@@ -719,9 +719,9 @@ const PROJECTS = [
   role: 'Student Designer',
   tools: ['Rhino 8', 'KeyShot'],
   materials: 'Gold metal, bronze, glass crystal',
-  cover: IMG('rhino/a5-crown-lamp-render.jpg'),
-  win:   IMG('rhino/a5-crown-lamp-render.jpg'), winFit: 'contain', winBg: 'blur',
-  hero:  IMG('rhino/a5-crown-lamp-render.jpg'),
+  cover: IMG('rhino/a5-crown-cover.jpg'),
+  win:   IMG('rhino/a5-crown-cover.jpg'), winFit: 'contain', winBg: 'blur',
+  hero:  IMG('rhino/a5-crown-cover.jpg'),
   models: [ { label: 'Crown Lamp', src: ASSETS + 'models/crown-lamp.glb?v=7' } ],
 
   summary: 'A decorative lighting fixture inspired by a royal crown and a chandelier — a circular crown body on a twisted stem, hung with crystal drops and set on a round base.',
@@ -760,7 +760,7 @@ const PROJECTS = [
   role: 'Student Designer',
   tools: ['Rhino 8', 'KeyShot'],
   cover: IMG('rhino/a6-watch-room-4.jpg'),
-  win:   IMG('rhino/a6-table-closeup.jpg'), winFit: 'contain', winBg: 'blur',
+  win:   IMG('rhino/a6-watch-room-4.jpg'), winPos: 'center 70%',
   hero:  IMG('rhino/a6-watch-room-4.jpg'),
   models: [ { label: 'The table', src: ASSETS + 'models/watch-table.glb?v=7' },
             { label: 'The room',  src: ASSETS + 'models/watch-table-room.glb?v=7' } ],

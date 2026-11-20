@@ -94,36 +94,127 @@ export function mountViewer(el, opts = {}) {
       polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 + (i % 24) * 2 });
   };
 
-  /* Where each part goes when the model comes apart. Flat products
-     separate in layers, like they are assembled; anything else spreads
-     out from its centre. */
+  /* Where each part goes when the model comes apart: a real exploded view.
+     The main components stack apart along the height in assembly order with
+     a clear gap between each, so none overlap. A component that sits inside
+     another (a filter in its housing, a tank in the body) slides out of it
+     sideways. Small pieces (buttons, feet, trims) stay with the part they
+     belong to and lift off its surface. */
   function planExplode(meshes, box) {
     const size = box.getSize(new THREE.Vector3()), C = box.getCenter(new THREE.Vector3());
-    const maxDim = Math.max(size.x, size.y, size.z), R = size.length() / 2;
-    const flat = size.y < .35 * Math.max(size.x, size.z);
+    const R = size.length() / 2, H = Math.max(size.y, 1e-6);
+    const vol = b => { const s = b.getSize(new THREE.Vector3()); return Math.max(s.x, 1e-6) * Math.max(s.y, 1e-6) * Math.max(s.z, 1e-6); };
+    const total = vol(box);
     const info = meshes.map(m => {
-      m.geometry.computeBoundingBox();
-      const c = m.geometry.boundingBox.getCenter(new THREE.Vector3()).applyMatrix4(m.matrixWorld);
-      return { m, c, home: m.position.clone() };
+      const b = new THREE.Box3().setFromObject(m);
+      return { m, b, c: b.getCenter(new THREE.Vector3()), s: b.getSize(new THREE.Vector3()), v: vol(b), home: m.position.clone(), off: new THREE.Vector3() };
     });
-    if (flat) {
-      const bin = size.y / 10 || 1;
-      const levels = [...new Set(info.map(p => Math.round(p.c.y / bin)))].sort((a, b) => a - b);
-      const gap = levels.length > 1 ? maxDim * .5 / (levels.length - 1) : 0;
+    /* a flat product (a cooktop, a watch) comes apart in layers, the way it is
+       assembled: parts at the same height move together, each layer lifts clear
+       of the one below it */
+    if (size.y < .35 * Math.max(size.x, size.z)) {
+      const bin = H / 12;
+      const levels = new Map();
       info.forEach(p => {
-        const L = levels.indexOf(Math.round(p.c.y / bin));
-        p.dir = new THREE.Vector3(0, L * gap, 0).add(new THREE.Vector3(p.c.x - C.x, 0, p.c.z - C.z).multiplyScalar(.12));
+        const k = Math.round(p.c.y / bin);
+        if (!levels.has(k)) levels.set(k, { k, b: new THREE.Box3(), list: [] });
+        const L = levels.get(k); L.b.union(p.b); L.list.push(p);
       });
-    } else {
-      info.forEach((p, i) => {
-        const d = p.c.clone().sub(C), len = d.length();
-        if (len < R * 1e-3) d.set(Math.cos(i * 2.4), .4, Math.sin(i * 2.4));
-        p.dir = d.normalize().multiplyScalar(R * .55 * (.35 + Math.min(len / R, 1)));
+      const order = [...levels.values()].sort((a, b) => a.k - b.k);
+      const lgap = Math.max(H * .7, R * .2);
+      let reachL = -Infinity, sh = 0;
+      order.forEach(L => {
+        sh = Math.max(sh, reachL + lgap - L.b.min.y);
+        L.list.forEach(p => p.off.set((p.c.x - C.x) * .06, sh, (p.c.z - C.z) * .06));
+        reachL = Math.max(reachL, L.b.max.y + sh);
       });
+      const m0 = order.length ? order[order.length - 1].list[0].off.y / 2 : 0;
+      info.forEach(p => { p.off.y -= m0; });
+      info.forEach(p => {
+        p.dir = p.off.clone(); p.dirW = p.off.clone();
+        const inv = new THREE.Matrix4().copy(p.m.parent.matrixWorld).invert();
+        p.dir.applyMatrix3(new THREE.Matrix3().setFromMatrix4(inv));
+      });
+      return info;
     }
+
+    /* main components: anything with a real share of the volume, or the biggest few */
+    const byVol = [...info].sort((a, b) => b.v - a.v);
+    const bigCut = Math.min(total * .01, byVol[Math.min(5, byVol.length - 1)].v);
+    info.forEach(p => { p.big = p.v >= bigCut; });
+    const big = info.filter(p => p.big), small = info.filter(p => !p.big);
+    const holds = (a, b, t) => a.b.clone().expandByVector(a.s.clone().multiplyScalar(t).addScalar(1e-6)).containsBox(b.b);
+
+    /* which main component each one sits inside (the smallest that holds it) */
+    big.forEach(p => {
+      let best = null;
+      big.forEach(q => { if (q !== p && q.v > p.v * 1.05 && holds(q, p, .03) && (!best || q.v < best.v)) best = q; });
+      p.parent = best;
+    });
+    const top = big.filter(p => !p.parent).sort((a, b) => a.c.y - b.c.y || a.b.min.y - b.b.min.y);
+
+    /* 1. top-level components stack up the height, each clear of the last */
+    const gap = H * .12;
+    let reach = -Infinity, shift = 0;
+    top.forEach(p => {
+      shift = Math.max(shift, reach + gap - p.b.min.y);
+      p.off.set(0, shift, 0);
+      reach = Math.max(reach, p.b.max.y + shift);
+    });
+    const mid = top.length ? (top[0].off.y + top[top.length - 1].off.y) / 2 : 0;   /* keep it centred */
+    top.forEach(p => { p.off.y -= mid; });
+
+    /* 2. nested components slide out of their housing, outermost first */
+    const depth = p => p.parent ? 1 + depth(p.parent) : 0;
+    const nested = big.filter(p => p.parent).sort((a, b) => depth(a) - depth(b) || a.c.y - b.c.y);
+    const placed = new Map();
+    const dirs = [new THREE.Vector3(0, 0, 1), new THREE.Vector3(1, 0, 0), new THREE.Vector3(-1, 0, 0), new THREE.Vector3(0, 0, -1)];
+    const root = p => p.parent ? root(p.parent) : p;
+    const highest = top[top.length - 1];
+    nested.forEach(p => {
+      const host = p.parent, h = host.b, d = new THREE.Vector3(p.c.x - host.c.x, 0, p.c.z - host.c.z);
+      const list0 = placed.get(host) || [];
+      /* a lid: it reaches the top of its housing, and nothing is stacked above that */
+      if (root(host) === highest && p.b.max.y >= h.max.y - host.s.y * .35) {
+        let up = h.max.y - p.b.min.y + gap;
+        const atU = () => p.b.clone().translate(host.off.clone().add(new THREE.Vector3(0, up, 0)));
+        for (let n = 0; n < 12 && list0.some(o => o.intersectsBox(atU())); n++) up += p.s.y + gap * .5;
+        p.off.copy(host.off).add(new THREE.Vector3(0, up, 0));
+        list0.push(atU()); placed.set(host, list0);
+        return;
+      }
+      const half = Math.max(host.s.x, host.s.z) / 2;
+      const list = placed.get(host) || []; placed.set(host, list);
+      const dir = d.length() > half * .2 ? d.normalize() : dirs[list.length % dirs.length].clone();
+      /* out far enough to clear the housing, then further if a sibling is already there */
+      const ext = v => Math.abs(v.x) * p.s.x / 2 + Math.abs(v.z) * p.s.z / 2;
+      const hostExt = Math.abs(dir.x) * host.s.x / 2 + Math.abs(dir.z) * host.s.z / 2;
+      const toEdge = hostExt - (p.c.clone().sub(host.c).dot(dir));
+      let dist = toEdge + ext(dir) + gap * .6;
+      const at = () => p.b.clone().translate(host.off.clone().addScaledVector(dir, dist));
+      for (let n = 0; n < 12 && list.some(o => o.intersectsBox(at())); n++) dist += ext(dir) * 2 + gap * .4;
+      p.off.copy(host.off).addScaledVector(dir, dist);
+      list.push(at());
+    });
+
+    /* 3. small pieces ride with the component they belong to and lift off it */
+    small.forEach(p => {
+      let host = null, bestV = 0;
+      big.forEach(q => {
+        const i = q.b.clone().expandByScalar(R * .01).intersect(p.b);
+        const v = i.isEmpty() ? 0 : vol(i);
+        if (v > bestV) { bestV = v; host = q; }
+      });
+      if (!host) host = big.reduce((a, q) => (q.c.distanceTo(p.c) < a.c.distanceTo(p.c) ? q : a), big[0]);
+      const out = p.c.clone().sub(host.c); out.y *= .35;
+      const len = out.length();
+      if (len < 1e-6) out.set(0, 1, 0); else out.divideScalar(len);
+      p.off.copy(host.off).addScaledVector(out, Math.max(p.s.x, p.s.y, p.s.z) * .5 + R * .05);
+    });
+
     /* the travel above is in world space; a part moves in its parent's */
     info.forEach(p => {
-      p.dirW = p.dir.clone();
+      p.dir = p.off.clone(); p.dirW = p.off.clone();
       const inv = new THREE.Matrix4().copy(p.m.parent.matrixWorld).invert();
       p.dir.applyMatrix3(new THREE.Matrix3().setFromMatrix4(inv));
     });
@@ -188,8 +279,9 @@ export function mountViewer(el, opts = {}) {
        comes apart, so everything inside it shows */
     const boxes = meshes.map(m => new THREE.Box3().setFromObject(m));
     shellMats = [];
+    const apart = parts.map(p => new THREE.Box3().setFromObject(p.m).translate(p.dirW));
     boxes.forEach((b, i) => {
-      const inside = boxes.filter((o, j) => j !== i && b.containsBox(o)).length;
+      const inside = apart.filter((o, j) => j !== i && apart[i].containsBox(o)).length;
       if (inside >= Math.max(1, (meshes.length - 1) * .1)) {
         const m = meshes[i].material; m.transparent = true; shellMats.push(m); meshes[i].renderOrder = 2;
       }
