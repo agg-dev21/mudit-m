@@ -63,6 +63,7 @@ const SITE = {
       { y: '2024', t: 'Creative Intelligence Award, Design & Technology' },
       { y: '2025–26', t: 'Dean’s List, SCAD, Fall 2025 – Spring 2026' },
       { y: '2026', t: '3rd place and a $2,000 honorary scholarship, SCADstartUp: Cogniva, a team-built companion robot that reduces social isolation in senior living communities' },
+      { y: '2026', t: 'Club officer, IDSA club at SCAD' },
       { y: 'Now',  t: 'Open to internships', now: true },
       { y: '2029', t: 'BFA Industrial Design, SCAD (expected)', future: true }
     ]
