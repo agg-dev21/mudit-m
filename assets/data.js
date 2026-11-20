@@ -890,7 +890,7 @@ const PROJECTS = [
 
   rk.coursework = {
     title: 'First-term coursework',
-    text: 'The smaller Rhino 8 assignments from the same term — 2D curves, solids and surfaces. The three larger ones are projects of their own: Crown Lamp, Watch Table and Ear Container; the parametric vase is on the Grasshopper page.',
+    text: 'The smaller Rhino 8 assignments from the same term — 2D curves, solids and surfaces. The larger ones are projects of their own: Crown Lamp, Watch Table, Ear Container and the Aerion One redesign; the parametric vase is on the Grasshopper page.',
     items: [
       { title: 'Logos in 2D CAD',
         text: 'Three logos rebuilt as 2D CAD curves with the basic drawing tools, each one a clean, closed figure traced from the reference.',
@@ -917,7 +917,7 @@ const PROJECTS = [
                    { src: ASSETS + 'rhino/a4-mouse-loft.jpg', cap: 'The Loft approach' } ] ],
         files: [ { label: 'Rhino file', type: '3DM', href: 'assets/rhino-files/04-mouse.3dm' } ] }
     ],
-    book: { label: 'Process book — the full term', type: 'PDF', href: 'assets/rhino-files/Mudit_Manocha_Process_Book.pdf' }
+    book: { label: 'Process book — the full term, assignments 1–9', type: 'PDF', href: 'assets/rhino-files/Mudit_Manocha_Process_Book.pdf?v=2' }
   };
 
   SITE.modelling.find(t => t.slug === 'grasshopper').page.coursework = {

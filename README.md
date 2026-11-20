@@ -189,6 +189,6 @@ images slot straight in beside the right text.
 
 ## Coursework, files and sketches
 
-- Projects 07-09 (Crown Lamp, Watch Table, Ear Container) are the larger Rhino/KeyShot assignments, each with 3D models in `assets/models`. The smaller first-term assignments live on the Rhino & KeyShot tool page (`rk.coursework` at the bottom of `data.js`).
+- Crown Lamp, Watch Table, Ear Container and the Aerion One redesign (assignment 9) are the larger Rhino/KeyShot assignments, each with 3D models in `assets/models`. The smaller first-term assignments live on the Rhino & KeyShot tool page (`rk.coursework` at the bottom of `data.js`).
 - A chapter can carry `files: [{ label, type, href }]`: a download list shown under its text. Source files are in `assets/rhino-files`. The 137 MB KeyShot scene is deliberately not included.
 - The Sketches page reads `page.sections` (also at the bottom of `data.js`); the images are in `assets/sketchbook`.
