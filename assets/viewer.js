@@ -47,7 +47,7 @@ export function mountViewer(el, opts = {}) {
   const shadowTex = (() => {
     const c = document.createElement('canvas'); c.width = c.height = 128;
     const g = c.getContext('2d'), r = g.createRadialGradient(64, 64, 0, 64, 64, 64);
-    r.addColorStop(0, 'rgba(0,0,0,.55)'); r.addColorStop(.45, 'rgba(0,0,0,.25)'); r.addColorStop(1, 'rgba(0,0,0,0)');
+    r.addColorStop(0, 'rgba(0,0,0,.5)'); r.addColorStop(.35, 'rgba(0,0,0,.28)'); r.addColorStop(.7, 'rgba(0,0,0,.08)'); r.addColorStop(1, 'rgba(0,0,0,0)');
     g.fillStyle = r; g.fillRect(0, 0, 128, 128);
     return new THREE.CanvasTexture(c);
   })();
@@ -61,7 +61,11 @@ export function mountViewer(el, opts = {}) {
   const spin = new THREE.Quaternion(), goal = new THREE.Quaternion(), dq = new THREE.Quaternion();
   const yawQ = new THREE.Quaternion(), vel = new THREE.Vector2(), tmp = new THREE.Vector3();
   const AX_Y = new THREE.Vector3(0, 1, 0), AX_X = new THREE.Vector3(1, 0, 0), IDENT = new THREE.Quaternion();
-  const turn = (ax, ay) => { goal.premultiply(dq.setFromAxisAngle(AX_Y, ax)).premultiply(dq.setFromAxisAngle(AX_X, ay)).normalize(); };
+  /* a turntable, like a product on a stand: the drag spins it round its upright and tips it
+     toward or away from you, within a range, so it never ends up on its head */
+  let yaw = 0, pitch = 0;
+  const PMAX = 1.05;                                    /* about 60 degrees either way */
+  const turn = (ax, ay) => { yaw += ax; pitch = Math.max(-PMAX, Math.min(PMAX, pitch + ay)); goal.setFromAxisAngle(AX_X, pitch).multiply(dq.setFromAxisAngle(AX_Y, yaw)); };
   const SENS = .0042, MAXV = .045;
   /* the way the page wants it to face; the model eases into it */
   const poseQ = new THREE.Quaternion(), poseNow = new THREE.Quaternion(), tiltQ = new THREE.Quaternion();
@@ -470,13 +474,17 @@ export function mountViewer(el, opts = {}) {
   io.observe(el);
 
   function frame(now) {
-    if (resetting) { goal.slerp(IDENT, .1); if (goal.angleTo(IDENT) < .002) { goal.identity(); resetting = false; } }
+    if (resetting) {
+      const home = Math.round(yaw / (Math.PI * 2)) * Math.PI * 2;
+      yaw += (home - yaw) * .1; pitch *= .9; turn(0, 0);
+      if (Math.abs(home - yaw) < .002 && Math.abs(pitch) < .002) { yaw = 0; pitch = 0; turn(0, 0); resetting = false; }
+    }
     else if (!dragging) {
       /* a throw coasts and dies away; after a pause a slow turn fades back in,
          unless the page is turning it */
-      const idle = REDUCED || opts.autoTurn === false ? 0 : Math.min(1, Math.max(0, (now - idleAt - 1500) / 2000));
-      turn(vel.x + .0025 * idle, vel.y);
-      vel.multiplyScalar(.94);
+      const idle = REDUCED || opts.autoTurn === false ? 0 : Math.min(1, Math.max(0, (now - idleAt - 1200) / 900));
+      turn(vel.x + .0068 * idle, vel.y);
+      vel.multiplyScalar(.95);
     }
     spin.slerp(goal, REDUCED ? 1 : .11);
     poseNow.slerp(poseQ, REDUCED ? 1 : .055);
