@@ -1250,3 +1250,11 @@ html.has-cur,html.has-cur *{cursor:none!important}
 .ch-body .ch-list + p{margin-top:1.1em}
 .say-arrow{color:var(--signal);font-weight:400;margin:0 .12em}
 .stack-inner.light .stack-top{color:rgba(20,20,22,.72);text-shadow:none}
+
+/* phones: a project can carry a tall card image of its own (winM) */
+.stack-photo .m-pic{display:none}
+@media (max-width:720px){
+  .stack-photo.has-m{inset:0;transform:none!important}   /* the tall image is made to the card's own shape */
+  .stack-photo.has-m > :not(.m-pic){display:none}
+  .stack-photo.has-m .m-pic{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+}

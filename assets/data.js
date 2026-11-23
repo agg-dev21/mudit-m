@@ -189,6 +189,7 @@ const PROJECTS = [
   tools: ['Sketching', 'CAD', 'Form Development'],
   cover: IMG('stove/stove-cover.jpg'),
   win:   IMG('stove/stove-cover.jpg'), winPos: 'center 55%',
+  winM:  IMG('phone/electric-stove.jpg'),   // tall version for phones
   hero:  IMG('electric-stove-body-handle-s-01-8c9577cd6f.jpg'),
   models: [ { label: 'Concept 1', src: ASSETS + 'models/stove-concept-1.glb?v=2&x=layers' },
             { label: 'Concept 2', src: ASSETS + 'models/stove-concept-2.glb?v=2&x=layers' } ],   // real Rhino models
@@ -366,6 +367,7 @@ const PROJECTS = [
   tools: ['Mechanism Design', 'CAD', '3D Printing'],
   cover: IMG('chair/chair-cover.jpg'),
   win:   IMG('chair/chair-card.jpg'),   // composed for the card: his mechanism sketch beside the CAD model
+  winM:  IMG('phone/headrest.jpg'),   // tall version for phones
   hero:  IMG('chair/chair-cover.jpg'),
   models: [ { label: 'Study model', src: ASSETS + 'models/study-headrest.glb?v=4&x=slide', study: true } ],   // built from the CAD sheets, not his file
 
@@ -433,6 +435,7 @@ const PROJECTS = [
   materials: 'Steel Washers, Wire, LED Bulb',
   cover: IMG('lamp/lamp-02.jpg'),
   win:   IMG('lamp/lamp-card.jpg'),   // composed for the card: his sketch beside the lit lamp
+  winM:  IMG('phone/washer-lamp.jpg'),   // tall version for phones
   hero:  IMG('lamp/lamp-cover.jpg'),
   models: [ { label: 'Study model', src: ASSETS + 'models/study-lamp.glb?x=tiers', study: true } ],        // built from the photo, not his file
 
@@ -482,6 +485,7 @@ const PROJECTS = [
   materials: 'Olive metal, copper, smoked acrylic',
   cover: IMG('aerion/a26-cover.jpg'),
   win:   IMG('aerion/a26-card.jpg'), winPos: 'center',   // rendered for the card from his Rhino file, assembled and exploded
+  winM:  IMG('phone/aerion-one.jpg'),   // tall version for phones
   hero:  IMG('aerion/a26-cover.jpg'),
   models: [ { label: 'Aerion One', src: ASSETS + 'models/aerion-one.glb?v=2&x=tower' } ],   // from his 2026 Rhino file (assignment 9)
 
@@ -721,6 +725,7 @@ const PROJECTS = [
   materials: 'Gold metal, bronze, glass crystal',
   cover: IMG('rhino/a5-crown-cover.jpg'),
   win:   IMG('rhino/a5-crown-lamp-render.jpg'), winPos: 'center 45%',
+  winM:  IMG('phone/crown-lamp.jpg'),   // tall version for phones
   hero:  IMG('rhino/a5-crown-cover.jpg'),
   models: [ { label: 'Crown Lamp', src: ASSETS + 'models/crown-lamp.glb?v=7&x=tiers' } ],
 

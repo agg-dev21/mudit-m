@@ -196,7 +196,7 @@ function buildStack() {
     <span class="stack-anchor" id="p-${p.slug}"></span>
     <div class="stack-card">
       <a class="stack-inner${light ? ' light' : ''}" href="#/${p.slug}" data-cursor="view"${bg}>
-        <div class="stack-photo${contain ? ' contain' : ''}">${photo}</div>
+        <div class="stack-photo${contain ? ' contain' : ''}${p.winM ? ' has-m' : ''}">${photo}${p.winM ? `<img class="m-pic" src="${p.winM}" alt="${esc(p.name)}" loading="lazy">` : ''}</div>
         <div class="stack-shade"></div>
         <div class="stack-top"><span>${pad(i + 1)} / ${pad(PROJECTS.length)}</span><span>${p.models ? '<em class="chip-3d">3D</em>' : ''}${esc(p.discipline)} · ${esc(p.year)}</span></div>
         <div class="stack-meta">
