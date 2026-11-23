@@ -422,6 +422,32 @@ export function mountViewer(el, opts = {}) {
   };
   addEventListener('pointermove', move); addEventListener('pointerup', up); addEventListener('pointercancel', up);
 
+  /* ---------------------------------------------------------- phone tilt */
+  /* On a phone, tilting it walks you round the model, on top of any drag.
+     The first touch asks for motion access (iOS needs a tap for that);
+     wherever the phone is held then becomes "straight on", and that rest
+     position drifts slowly so a new grip never leaves the model stuck askew. */
+  const coarse = matchMedia('(hover: none) and (pointer: coarse)').matches;
+  const tiltNow = new THREE.Quaternion(), tiltEuler = new THREE.Euler();
+  let tiltOn = false, tiltAsked = false, rest = null, tx = 0, ty = 0;
+  const TMAX = .6;                                     /* about 35 degrees either way */
+  const onTilt = e => {
+    if (e.beta == null || e.gamma == null) return;
+    if (!rest) rest = { b: e.beta, g: e.gamma };
+    rest.b += (e.beta - rest.b) * .004; rest.g += (e.gamma - rest.g) * .004;
+    ty = Math.max(-TMAX, Math.min(TMAX, (e.gamma - rest.g) * Math.PI / 180 * 1.3));
+    tx = Math.max(-TMAX, Math.min(TMAX, (e.beta - rest.b) * Math.PI / 180 * .9));
+  };
+  const startTilt = () => {
+    if (tiltAsked || !coarse || REDUCED || typeof DeviceOrientationEvent === 'undefined') return;
+    tiltAsked = true;
+    const go = () => { tiltOn = true; addEventListener('deviceorientation', onTilt); say('Tilt your phone to look around it'); };
+    if (typeof DeviceOrientationEvent.requestPermission === 'function')
+      DeviceOrientationEvent.requestPermission().then(r => { if (r === 'granted') go(); }).catch(() => {});
+    else go();
+  };
+  cvs.addEventListener('touchend', startTilt, { passive: true });
+
   /* -------------------------------------------------------------- lifecycle */
   let dist = FOV_FIT, frameOff = { x: 0, y: 0, w: 1, h: 1 }, centred = null;
   /* opts.frame() → { x, y, w, h }, the share of the canvas the model is
@@ -454,6 +480,7 @@ export function mountViewer(el, opts = {}) {
     }
     spin.slerp(goal, REDUCED ? 1 : .11);
     poseNow.slerp(poseQ, REDUCED ? 1 : .055);
+    if (tiltOn) tiltNow.slerp(tiltQ.setFromEuler(tiltEuler.set(tx, ty, 0)), visible ? .12 : 1);
     zoom += (zoomGoal - zoom) * (REDUCED ? 1 : .12);
     pan.x += (panGoal.x - pan.x) * (REDUCED ? 1 : .12);
     pan.y += (panGoal.y - pan.y) * (REDUCED ? 1 : .12);
@@ -470,7 +497,7 @@ export function mountViewer(el, opts = {}) {
       fit.pivot.scale.setScalar(sc);
       /* the visitor's turning is applied last, in screen terms, so a drag
          always turns the model the way the hand moves, whatever the pose */
-      fit.pivot.quaternion.copy(spin).multiply(poseNow);
+      fit.pivot.quaternion.copy(tiltNow).multiply(spin).multiply(poseNow);
       fit.pivot.position.y = (1 - a) * -.12;
       fit.pivot.visible = appear > .01;
 
@@ -529,6 +556,7 @@ export function mountViewer(el, opts = {}) {
       cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); clear();
       removeEventListener('pointerdown', outside, true); removeEventListener('keydown', onKey);
       removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up);
+      removeEventListener('deviceorientation', onTilt);
       clearTimeout(hintT); hint.remove();
       shadow.geometry.dispose(); shadow.material.dispose(); shadowTex.dispose();
       scene.environment?.dispose(); pmrem.dispose(); renderer.dispose(); renderer.forceContextLoss?.(); cvs.remove();
